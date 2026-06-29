@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import { teamReels } from '@/lib/data';
 import Mask from './mask';
 import HlsVideo from './hls-video';
-import { attachHls, posterFor, soloAudio, dropAudio, subscribeAudio, audioOwner, type HlsHandle } from '@/lib/hls';
+import { attachHls, posterFor, soloAudio, dropAudio, subscribeAudio, audioOwner, safePlay, type HlsHandle } from '@/lib/hls';
 
-/* ── Reels reales (vertical 9:16) — editar aquí si cambian las URLs ── */
+/* ── Real reels (vertical 9:16) — edit here if URLs change ── */
 const HOST = 'https://vz-5c81264f-e6c.b-cdn.net';
 const REELS = [
   { name: 'Andrea Mamane', url: `${HOST}/6a0a2269-14fc-452c-b1a8-c102616ad477/playlist.m3u8` },
@@ -19,7 +19,7 @@ const imgFor = (name: string) =>
 export default function Reels() {
   const [reduce, setReduce] = useState(false);
   const [center, setCenter] = useState(0);
-  const [active, setActive] = useState(false); // center reel enfocado + con sonido
+  const [active, setActive] = useState(false); // center reel has sound
 
   const stageRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
@@ -29,7 +29,6 @@ export default function Reels() {
   const target = useRef(0);
   const current = useRef(0);
   const centerRef = useRef(-1);
-  const activeRef = useRef(false);
   const dragging = useRef(false);
   const moved = useRef(false);
   const lastInteract = useRef(0);
@@ -37,17 +36,21 @@ export default function Reels() {
   useEffect(() => { setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches); }, []);
 
   const ensure = (i: number) => {
-    if (handles.current[i]) return;
     const v = videoRefs.current[i];
-    if (v) handles.current[i] = attachHls(v, REELS[i].url);
+    if (!v) return;
+    if (!handles.current[i]) {
+      v.muted = true;
+      handles.current[i] = attachHls(v, REELS[i].url);
+      v.addEventListener('canplay', () => { if (centerRef.current === i) safePlay(v); }, { once: true });
+    }
   };
 
   const setCenterVideo = (i: number) => {
     ensure(i);
-    activeRef.current = false; setActive(false); // nuevo central llega desenfocado
+    setActive(false);
     videoRefs.current.forEach((v, k) => {
       if (!v) return;
-      if (k === i) { v.muted = true; v.play().catch(() => {}); }
+      if (k === i) { v.muted = true; safePlay(v); }
       else { v.pause(); if (audioOwner() === v) dropAudio(v); else v.muted = true; }
     });
     setCenter(i);
@@ -55,8 +58,7 @@ export default function Reels() {
 
   useEffect(() => subscribeAudio(() => {
     const v = videoRefs.current[centerRef.current];
-    const on = !!v && audioOwner() === v && !v.muted;
-    activeRef.current = on; setActive(on);
+    setActive(!!v && audioOwner() === v && !v.muted);
   }), []);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function Reels() {
         const off = i - c;
         const a = Math.min(Math.abs(off), 3);
         el.style.transform = `translate(-50%,-50%) translateX(${off * spacing}px) translateZ(${-a * 190}px) rotateY(${Math.max(-58, Math.min(58, -off * 27))}deg) scale(${1 - a * 0.07})`;
-        el.style.opacity = String(Math.max(0.5, 1 - a * 0.16));
+        el.style.opacity = String(Math.max(0.55, 1 - a * 0.15));
         el.style.zIndex = String(100 - Math.round(a * 10));
       });
       const ci = clamp(Math.round(c));
@@ -100,7 +102,7 @@ export default function Reels() {
     const onMove = (e: PointerEvent) => {
       if (!dragging.current) return;
       const dx = e.clientX - downX;
-      if (Math.abs(dx) > 6) moved.current = true;
+      if (Math.abs(dx) > 8) moved.current = true;
       target.current = clamp(downT - dx / spacing);
       lastInteract.current = performance.now();
     };
@@ -127,29 +129,30 @@ export default function Reels() {
 
   const go = (dir: number) => { target.current = Math.max(0, Math.min(REELS.length - 1, Math.round(current.current) + dir)); lastInteract.current = performance.now(); };
 
+  // single click = center it AND play with sound
   const onCardClick = (i: number) => {
     if (moved.current) return;
-    if (Math.round(current.current) !== i) { target.current = i; lastInteract.current = performance.now(); return; }
-    // está centrado -> enfocar + sonido / quitar
-    const v = videoRefs.current[i]; if (!v) return;
-    if (v.muted) { soloAudio(v); activeRef.current = true; setActive(true); }
-    else { dropAudio(v); activeRef.current = false; setActive(false); }
+    target.current = i; lastInteract.current = performance.now();
+    ensure(i);
+    const v = videoRefs.current[i];
+    if (v) { soloAudio(v); setActive(true); }
   };
 
-  const videoFilter = (i: number): string => {
-    if (i === center) return active ? 'none' : 'blur(11px) brightness(0.62)';
-    return 'blur(2px) brightness(0.82)';
+  const toggleSound = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = videoRefs.current[center]; if (!v) return;
+    if (v.muted) { soloAudio(v); setActive(true); } else { dropAudio(v); setActive(false); }
   };
 
   return (
     <section className="bg-ink text-paper pt-20 md:pt-28 pb-14">
       <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
-        <span className="text-gold uppercase tracking-[0.3em] text-xs font-semibold">Si una imagen dice 1.000 palabras…</span>
+        <span className="text-gold uppercase tracking-[0.3em] text-xs font-semibold">If a picture says 1,000 words…</span>
         <Mask as="h2" split="lines" className="mt-4 font-serif leading-[1.04]" style={{ fontSize: 'clamp(1.9rem,4.6vw,3.6rem)' }}>
-          ¿Qué dice tu contenido <span className="italic text-gold-bright">sobre ti?</span>
+          What is your content saying <span className="italic text-gold-bright">about you?</span>
         </Mask>
         <p className="text-paper-muted mt-5 max-w-2xl mx-auto text-base md:text-lg">
-          Solo tienes una oportunidad para causar una buena primera impresión; déjanos hacerla inolvidable.
+          You only get one chance to make a first impression — let us make it unforgettable.
         </p>
       </div>
 
@@ -168,8 +171,8 @@ export default function Reels() {
       ) : (
         <>
           <div ref={stageRef} className="reel-stage mt-6 select-none">
-            <button className="reel-arrow left" aria-label="Anterior" onClick={() => go(-1)}>‹</button>
-            <button className="reel-arrow right" aria-label="Siguiente" onClick={() => go(1)}>›</button>
+            <button className="reel-arrow left" aria-label="Previous" onClick={() => go(-1)}>‹</button>
+            <button className="reel-arrow right" aria-label="Next" onClick={() => go(1)}>›</button>
             <div className="reel-track">
               {REELS.map((r, i) => (
                 <div
@@ -178,18 +181,16 @@ export default function Reels() {
                   className={`reel-card${center === i ? ' is-center' : ''}`}
                   onClick={() => onCardClick(i)}
                 >
-                  {center === i && active && <span className="reel-live">● En vivo</span>}
                   <video
                     ref={(el) => { if (el) videoRefs.current[i] = el; }}
-                    poster={posterFor(r.url)} playsInline loop muted preload="none"
-                    style={{ filter: videoFilter(i) }}
+                    poster={posterFor(r.url)} playsInline loop preload="none"
                     className="h-full w-full object-cover"
                   />
-                  {center === i && !active && (
-                    <div className="reel-veil">
-                      <span className="reel-play">▶</span>
-                      <span>Toca para reproducir con sonido</span>
-                    </div>
+                  {center === i && (
+                    <button onClick={toggleSound} aria-label={active ? 'Mute' : 'Unmute'}
+                      className="absolute z-20 bottom-3 right-3 grid place-items-center w-12 h-12 rounded-full bg-ink/70 backdrop-blur ring-1 ring-gold/50 text-paper transition-colors hover:bg-gold hover:text-ink">
+                      <span className="text-lg leading-none">{active ? '🔊' : '🔇'}</span>
+                    </button>
                   )}
                 </div>
               ))}
@@ -203,7 +204,7 @@ export default function Reels() {
             <span className="font-serif italic text-gold-bright" style={{ fontSize: 'clamp(1.3rem,3vw,2rem)' }}>{REELS[center].name}</span>
           </div>
           <p className="mt-3 text-center text-paper-muted/70 text-[0.7rem] uppercase tracking-[0.22em]">
-            Arrastra con el mouse · usa las flechas · toca el reel para reproducirlo
+            Drag, use the arrows, or tap the volume icon to play with sound
           </p>
         </>
       )}

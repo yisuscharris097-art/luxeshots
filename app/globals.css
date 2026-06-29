@@ -154,3 +154,21 @@ html.lenis, html.lenis body { height: auto; }
 .reel-arrow:hover { background: var(--gold); color: #0B0B0C; }
 .reel-arrow.left { left: max(14px, 3vw); }
 .reel-arrow.right { right: max(14px, 3vw); }
+
+/* ---- Telescope: mobile (tighter, less spread) ---- */
+@media (max-width: 768px) {
+  .tele-words h1 { font-size: clamp(2.4rem, 13vw, 5rem); }
+  .tele-words .left  { transform: translate3d(calc(var(--progress) * (-100vw + 100%) - .5vw), 0, 0); }
+  .tele-words .right { transform: translate3d(calc(var(--progress) * (100vw - 100%)), 0, 0); }
+  .tele-small img { width: 33vw; }
+  .tele-small img:nth-of-type(1){ top:21vh; left:3vw; right:auto; bottom:auto; }
+  .tele-small img:nth-of-type(2){ top:14vh; left:35vw; right:auto; bottom:auto; }
+  .tele-small img:nth-of-type(3){ top:19vh; right:3vw; left:auto; bottom:auto; }
+  .tele-small img:nth-of-type(4){ top:39vh; left:0; right:auto; bottom:auto; }
+  .tele-small img:nth-of-type(5){ top:43vh; right:0; left:auto; bottom:auto; }
+  .tele-small img:nth-of-type(6){ bottom:33vh; left:5vw; top:auto; right:auto; }
+  .tele-small img:nth-of-type(7){ bottom:28vh; right:5vw; top:auto; left:auto; }
+  .tele-small img:nth-of-type(8){ bottom:15vh; left:34vw; top:auto; right:auto; }
+  .tele-small img:nth-of-type(9){ bottom:19vh; left:2vw; top:auto; right:auto; }
+  .tele-small img:nth-of-type(10){ bottom:12vh; right:2vw; top:auto; left:auto; }
+}

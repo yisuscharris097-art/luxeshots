@@ -52,12 +52,19 @@ export function subscribeAudio(cb: () => void): () => void {
   subs.add(cb);
   return () => { subs.delete(cb); };
 }
+/** Robust play: retries once the media can actually play (HLS warm-up). */
+export function safePlay(v: HTMLVideoElement) {
+  const p = v.play?.();
+  if (p && typeof p.catch === 'function') {
+    p.catch(() => { v.addEventListener('canplay', () => v.play().catch(() => {}), { once: true }); });
+  }
+}
 /** Give sound to `v`, muting whoever had it. */
 export function soloAudio(v: HTMLVideoElement) {
   if (currentAudio && currentAudio !== v) currentAudio.muted = true;
   currentAudio = v;
   v.muted = false;
-  v.play?.().catch(() => {});
+  safePlay(v);
   notify();
 }
 /** Mute `v` and release the bus if it owned it. */

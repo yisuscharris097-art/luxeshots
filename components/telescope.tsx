@@ -62,8 +62,8 @@ export default function Telescope() {
         <img src={CENTER_IMG} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-ink/50" />
         <div className="relative z-10 text-center px-6">
-          <h2 className="font-serif italic text-paper" style={{ fontSize: 'clamp(2.4rem,8vw,5rem)' }}>El <span className="text-gold-bright">Lujo</span></h2>
-          <p className="mt-4 text-paper-muted max-w-xl mx-auto">Cada toma, grabada donde el lujo realmente vive.</p>
+          <h2 className="font-serif italic text-paper" style={{ fontSize: 'clamp(2.4rem,8vw,5rem)' }}>Step Into <span className="text-gold-bright">Luxury</span></h2>
+          <p className="mt-4 text-paper-muted max-w-xl mx-auto">Every frame, shot where luxury actually lives.</p>
         </div>
       </section>
     );
@@ -72,7 +72,7 @@ export default function Telescope() {
   return (
     <section ref={ref} className="telescope">
       <div className="tele-words">
-        <h1><span className="left">El</span><span className="right">Lujo</span></h1>
+        <h1><span className="left">Step Into</span><span className="right">Luxury</span></h1>
       </div>
 
       <div className="tele-media">
@@ -88,7 +88,7 @@ export default function Telescope() {
 
       <div className="tele-message">
         <p className="font-serif text-paper" style={{ fontSize: 'clamp(1.4rem,3vw,2.4rem)', lineHeight: 1.15 }}>
-          Cada toma, grabada donde <span className="italic text-gold-bright">el lujo realmente vive.</span>
+          Every frame, shot where <span className="italic text-gold-bright">luxury actually lives.</span>
         </p>
       </div>
     </section>
