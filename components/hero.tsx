@@ -2,16 +2,17 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { contentDays } from '@/lib/data';
+import HlsVideo from './hls-video';
+import { posterFor } from '@/lib/hls';
 
-/**
- * HERO — cinematic gold/black entrance.
- * image-in-text on "FREE" (mansions revealed inside the word) + staggered GSAP
- * entrance + slow Ken Burns ambience + 3D cursor tilt on the headline (home-hero).
- */
+/* ── Reel horizontal (16:9) que va al inicio ── */
+const HERO_REEL = 'https://vz-5c81264f-e6c.b-cdn.net/1e7a339f-240e-454a-aeb7-a1690e293540/playlist.m3u8';
+/* Imagen de fondo del hero (tenue, Ken Burns). Cambiar aquí si "la chica del caballo" es esta. */
+const HERO_BG = contentDays[3]?.image || contentDays[0]?.image || '/images/og.jpeg';
+
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
-  const heroImg = contentDays[3]?.image || contentDays[0]?.image || '/images/og.jpeg';
 
   // entrance
   useEffect(() => {
@@ -64,19 +65,14 @@ export default function Hero() {
   }, []);
 
   const clipText: React.CSSProperties = {
-    backgroundImage: `url(${heroImg})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center 35%',
-    WebkitBackgroundClip: 'text',
-    backgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    color: 'transparent',
+    backgroundImage: `url(${HERO_BG})`, backgroundSize: 'cover', backgroundPosition: 'center 35%',
+    WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent', color: 'transparent',
   };
 
   return (
     <section ref={root} className="relative min-h-[100svh] bg-ink text-paper overflow-hidden">
       <div className="absolute inset-0 z-0" aria-hidden>
-        <img src={heroImg} alt="" className="kenburns h-full w-full object-cover opacity-[0.16]" />
+        <img src={HERO_BG} alt="" className="kenburns h-full w-full object-cover opacity-[0.16]" />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/75 via-ink/88 to-ink" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,transparent_30%,rgba(11,11,12,0.65)_100%)]" />
       </div>
@@ -84,9 +80,7 @@ export default function Hero() {
       <header data-h-top className="relative z-10 flex items-center justify-between px-5 md:px-10 py-5">
         <img src="/images/logo.png" alt="LuxeShots" className="h-7 md:h-9 w-auto" />
         <a href="https://instagram.com/luxeshotsbyus" target="_blank" rel="noopener noreferrer"
-          className="text-paper-muted hover:text-gold transition-colors text-xs uppercase tracking-[0.24em]">
-          Instagram
-        </a>
+          className="text-paper-muted hover:text-gold transition-colors text-xs uppercase tracking-[0.24em]">Instagram</a>
       </header>
 
       <div ref={headRef} className="relative z-10 mx-auto max-w-6xl px-5 md:px-8 pt-1 md:pt-3 pb-12 flex flex-col items-center text-center" style={{ transformStyle: 'preserve-3d' }}>
@@ -97,9 +91,7 @@ export default function Hero() {
         <h1 className="mt-5 font-sans font-extrabold leading-[0.98] tracking-[-0.02em]" style={{ fontSize: 'clamp(2rem,5vw,4.4rem)' }}>
           <span className="block overflow-hidden"><span data-h-line className="block">Get a Viral Video Reel</span></span>
           <span className="block overflow-hidden"><span data-h-line className="block">+ Scroll-Stopping Headshot</span></span>
-          <span className="block overflow-hidden">
-            <span data-h-line className="block">Absolutely <span style={clipText}>FREE</span></span>
-          </span>
+          <span className="block overflow-hidden"><span data-h-line className="block">Absolutely <span style={clipText}>FREE</span></span></span>
         </h1>
 
         <p data-h-sub className="mt-4 max-w-2xl text-paper-muted text-base md:text-lg">
@@ -107,12 +99,9 @@ export default function Hero() {
           <span className="text-gold font-semibold">FREE</span>, inside a multimillion-dollar listing.
         </p>
 
-        <div data-h-video className="mt-6 relative w-full max-w-xl aspect-video overflow-hidden ring-1 ring-line shadow-[0_50px_130px_-50px_rgba(0,0,0,0.85)]">
-          <img src="/images/og.jpeg" alt="Luxe Content Day session preview" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-ink/25" />
-          <button className="group absolute inset-0 grid place-items-center" aria-label="Play intro video">
-            <span className="grid place-items-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-gold/95 text-ink text-2xl pl-1 shadow-[0_10px_40px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-110">▶</span>
-          </button>
+        {/* Reel horizontal de apertura (autoplay muteado + sonido al toque) */}
+        <div data-h-video className="mt-6 w-full max-w-xl shadow-[0_50px_130px_-50px_rgba(0,0,0,0.85)]">
+          <HlsVideo src={HERO_REEL} poster={posterFor(HERO_REEL)} rounded autoUnmute className="aspect-video ring-1 ring-line" />
         </div>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
