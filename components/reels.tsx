@@ -19,7 +19,7 @@ const imgFor = (name: string) =>
 export default function Reels() {
   const [reduce, setReduce] = useState(false);
   const [center, setCenter] = useState(0);
-  const [soundOn, setSoundOn] = useState(false);
+  const [active, setActive] = useState(false); // center reel enfocado + con sonido
 
   const stageRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<HTMLDivElement[]>([]);
@@ -29,6 +29,7 @@ export default function Reels() {
   const target = useRef(0);
   const current = useRef(0);
   const centerRef = useRef(-1);
+  const activeRef = useRef(false);
   const dragging = useRef(false);
   const moved = useRef(false);
   const lastInteract = useRef(0);
@@ -43,19 +44,19 @@ export default function Reels() {
 
   const setCenterVideo = (i: number) => {
     ensure(i);
+    activeRef.current = false; setActive(false); // nuevo central llega desenfocado
     videoRefs.current.forEach((v, k) => {
       if (!v) return;
-      if (k === i) { v.play().catch(() => {}); }
+      if (k === i) { v.muted = true; v.play().catch(() => {}); }
       else { v.pause(); if (audioOwner() === v) dropAudio(v); else v.muted = true; }
     });
     setCenter(i);
-    setSoundOn(audioOwner() === videoRefs.current[i]);
   };
 
-  // keep sound icon synced with the bus
   useEffect(() => subscribeAudio(() => {
     const v = videoRefs.current[centerRef.current];
-    setSoundOn(!!v && audioOwner() === v && !v.muted);
+    const on = !!v && audioOwner() === v && !v.muted;
+    activeRef.current = on; setActive(on);
   }), []);
 
   useEffect(() => {
@@ -74,11 +75,7 @@ export default function Reels() {
         if (!el) return;
         const off = i - c;
         const a = Math.min(Math.abs(off), 3);
-        const x = off * spacing;
-        const z = -a * 190;
-        const ry = Math.max(-58, Math.min(58, -off * 27));
-        const s = 1 - a * 0.07;
-        el.style.transform = `translate(-50%,-50%) translateX(${x}px) translateZ(${z}px) rotateY(${ry}deg) scale(${s})`;
+        el.style.transform = `translate(-50%,-50%) translateX(${off * spacing}px) translateZ(${-a * 190}px) rotateY(${Math.max(-58, Math.min(58, -off * 27))}deg) scale(${1 - a * 0.07})`;
         el.style.opacity = String(Math.max(0.5, 1 - a * 0.16));
         el.style.zIndex = String(100 - Math.round(a * 10));
       });
@@ -128,16 +125,20 @@ export default function Reels() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
 
+  const go = (dir: number) => { target.current = Math.max(0, Math.min(REELS.length - 1, Math.round(current.current) + dir)); lastInteract.current = performance.now(); };
+
   const onCardClick = (i: number) => {
     if (moved.current) return;
-    if (Math.round(current.current) === i) toggleSound();
-    else { target.current = i; lastInteract.current = performance.now(); }
+    if (Math.round(current.current) !== i) { target.current = i; lastInteract.current = performance.now(); return; }
+    // está centrado -> enfocar + sonido / quitar
+    const v = videoRefs.current[i]; if (!v) return;
+    if (v.muted) { soloAudio(v); activeRef.current = true; setActive(true); }
+    else { dropAudio(v); activeRef.current = false; setActive(false); }
   };
-  const toggleSound = () => {
-    const v = videoRefs.current[centerRef.current < 0 ? 0 : centerRef.current];
-    if (!v) return;
-    if (v.muted) soloAudio(v); else dropAudio(v);
-    setSoundOn(!v.muted);
+
+  const videoFilter = (i: number): string => {
+    if (i === center) return active ? 'none' : 'blur(11px) brightness(0.62)';
+    return 'blur(2px) brightness(0.82)';
   };
 
   return (
@@ -167,6 +168,8 @@ export default function Reels() {
       ) : (
         <>
           <div ref={stageRef} className="reel-stage mt-6 select-none">
+            <button className="reel-arrow left" aria-label="Anterior" onClick={() => go(-1)}>‹</button>
+            <button className="reel-arrow right" aria-label="Siguiente" onClick={() => go(1)}>›</button>
             <div className="reel-track">
               {REELS.map((r, i) => (
                 <div
@@ -175,33 +178,32 @@ export default function Reels() {
                   className={`reel-card${center === i ? ' is-center' : ''}`}
                   onClick={() => onCardClick(i)}
                 >
-                  {center === i && <span className="reel-live">● Reel</span>}
+                  {center === i && active && <span className="reel-live">● En vivo</span>}
                   <video
                     ref={(el) => { if (el) videoRefs.current[i] = el; }}
                     poster={posterFor(r.url)} playsInline loop muted preload="none"
+                    style={{ filter: videoFilter(i) }}
                     className="h-full w-full object-cover"
                   />
+                  {center === i && !active && (
+                    <div className="reel-veil">
+                      <span className="reel-play">▶</span>
+                      <span>Toca para reproducir con sonido</span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* barra: avatar + nombre + sonido */}
-          <div className="mt-8 flex items-center justify-center gap-4">
+          <div className="mt-8 flex items-center justify-center gap-3">
             {imgFor(REELS[center].name) && (
               <img src={imgFor(REELS[center].name)} alt={REELS[center].name} className="w-11 h-11 rounded-full object-cover ring-1 ring-gold/50" />
             )}
             <span className="font-serif italic text-gold-bright" style={{ fontSize: 'clamp(1.3rem,3vw,2rem)' }}>{REELS[center].name}</span>
-            <button
-              onClick={toggleSound}
-              aria-label={soundOn ? 'Silenciar' : 'Activar sonido'}
-              className="grid place-items-center w-11 h-11 rounded-full bg-ink ring-1 ring-line text-paper transition-colors hover:bg-gold hover:text-ink"
-            >
-              <span className="text-base leading-none">{soundOn ? '🔊' : '🔇'}</span>
-            </button>
           </div>
           <p className="mt-3 text-center text-paper-muted/70 text-[0.7rem] uppercase tracking-[0.22em]">
-            Arrastra · toca un reel para centrarlo · 🔊 para el sonido
+            Arrastra con el mouse · usa las flechas · toca el reel para reproducirlo
           </p>
         </>
       )}

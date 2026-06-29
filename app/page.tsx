@@ -1,5 +1,5 @@
 import Hero from '@/components/hero';
-import MarqueeFlip from '@/components/marquee-flip';
+import Telescope from '@/components/telescope';
 import Exhibition from '@/components/exhibition';
 import Reels from '@/components/reels';
 import Invitation from '@/components/invitation';
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <MarqueeFlip />
+      <Telescope />
       <Exhibition />
       <Reels />
       <Invitation />

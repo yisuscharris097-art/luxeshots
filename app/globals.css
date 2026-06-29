@@ -117,3 +117,40 @@ html.lenis, html.lenis body { height: auto; }
 .reel-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,11,12,0.5), transparent 52%); pointer-events: none; }
 .reel-card.is-center { box-shadow: 0 50px 130px -24px rgba(0,0,0,0.9), 0 0 0 2px rgba(187,161,92,0.95); }
 .reel-live { position: absolute; top: 10px; left: 10px; z-index: 2; font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: #0B0B0C; background: var(--gold); padding: 3px 8px; border-radius: 999px; }
+
+/* ---- Telescope zoom (reemplaza la marquesina) ---- */
+.telescope { position: relative; height: 100vh; overflow: hidden; background: #0B0B0C; display: flex; align-items: center; justify-content: center; --progress: 0; }
+.tele-media { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; transform: scale(var(--progress)); will-change: transform; }
+.tele-media .tele-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tele-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.tele-front img { -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 42%, transparent 72%); mask-image: radial-gradient(circle at 50% 50%, #000 42%, transparent 72%); -webkit-mask-size: cover; mask-size: cover; -webkit-mask-position: center; mask-position: center; }
+.tele-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11,11,12,.4), rgba(11,11,12,.15) 40%, rgba(11,11,12,.7)); pointer-events: none; }
+.tele-words { position: relative; z-index: 5; width: 100%; text-align: center; pointer-events: none; }
+.tele-words h1 { display: flex; justify-content: center; gap: .28em; font-family: var(--font-serif), serif; font-style: italic; font-weight: 600; color: #F4F1EA; font-size: clamp(2.6rem, 9vw, 8rem); line-height: 1; letter-spacing: -0.02em; }
+.tele-words span { display: inline-block; will-change: transform; }
+.tele-words .left { transform: translate3d(calc(var(--progress) * (-60vw + 100%) - .5vw), 0, 0); }
+.tele-words .right { transform: translate3d(calc(var(--progress) * (60vw - 100%)), 0, 0); color: var(--gold-bright); }
+.tele-small { position: absolute; inset: 0; width: 100vw; height: 100vh; perspective: 100vh; z-index: 3; pointer-events: none; }
+.tele-small img { position: absolute; width: 12vw; border-radius: 3px; box-shadow: 0 24px 70px -22px rgba(0,0,0,.8); object-fit: cover; }
+.tele-small img:nth-of-type(1){top:15vw;left:-3vw}
+.tele-small img:nth-of-type(2){top:5vw;left:18vw}
+.tele-small img:nth-of-type(3){top:8vw;left:30vw}
+.tele-small img:nth-of-type(4){top:18vw;right:18vw}
+.tele-small img:nth-of-type(5){top:5vw;right:9vw}
+.tele-small img:nth-of-type(6){bottom:5vw;left:9vw}
+.tele-small img:nth-of-type(7){bottom:8vw;left:24vw}
+.tele-small img:nth-of-type(8){bottom:3vw;left:46vw}
+.tele-small img:nth-of-type(9){bottom:5vw;right:16vw}
+.tele-small img:nth-of-type(10){bottom:9vw;right:6vw}
+.tele-message { position: absolute; bottom: 7vh; left: 50%; transform: translateX(-50%); z-index: 6; width: 90%; max-width: 720px; text-align: center; opacity: 0; }
+@media (max-width:768px){ .tele-small img{ width:24vw } }
+
+/* ---- Reels: blur-to-play + arrows ---- */
+.reel-card video { transition: filter .5s ease; }
+.reel-veil { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; gap: .6rem; background: rgba(11,11,12,.28); }
+.reel-play { width: 64px; height: 64px; border-radius: 999px; background: rgba(187,161,92,.94); color: #0B0B0C; display: grid; place-items: center; font-size: 1.35rem; padding-left: 4px; box-shadow: 0 12px 44px rgba(0,0,0,.55); }
+.reel-veil span { font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: #F4F1EA; }
+.reel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 40; width: 52px; height: 52px; border-radius: 999px; background: rgba(11,11,12,.5); border: 1px solid rgba(187,161,92,.3); color: #F4F1EA; display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px); transition: background .3s, color .3s; font-size: 1.4rem; }
+.reel-arrow:hover { background: var(--gold); color: #0B0B0C; }
+.reel-arrow.left { left: max(14px, 3vw); }
+.reel-arrow.right { right: max(14px, 3vw); }
