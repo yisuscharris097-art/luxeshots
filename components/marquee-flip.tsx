@@ -18,7 +18,7 @@ export default function MarqueeFlip() {
   const quoteRef = useRef<HTMLDivElement>(null);
 
   const imgs = contentDays.slice(0, 12).map((c) => c.image);
-  const feature = contentDays[3]?.image || imgs[0];
+  const feature = '/images/luxe-event.jpeg';
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

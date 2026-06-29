@@ -102,3 +102,18 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ---- Footer fluid canvas ---- */
 .lux-fluid-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---- Reels: curved 3D coverflow (video) ---- */
+.reel-stage { position: relative; width: 100%; height: 78svh; min-height: 520px; overflow: hidden; perspective: 1700px; touch-action: pan-y; }
+.reel-track { position: absolute; inset: 0; transform-style: preserve-3d; }
+.reel-card {
+  position: absolute; top: 50%; left: 50%;
+  width: clamp(188px, 21vw, 280px); aspect-ratio: 9 / 16;
+  border-radius: 8px; overflow: hidden; cursor: pointer; background: #000;
+  will-change: transform, opacity;
+  box-shadow: 0 30px 80px -24px rgba(0,0,0,0.75);
+}
+.reel-card video, .reel-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.reel-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(11,11,12,0.5), transparent 52%); pointer-events: none; }
+.reel-card.is-center { box-shadow: 0 50px 130px -24px rgba(0,0,0,0.9), 0 0 0 2px rgba(187,161,92,0.95); }
+.reel-live { position: absolute; top: 10px; left: 10px; z-index: 2; font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: #0B0B0C; background: var(--gold); padding: 3px 8px; border-radius: 999px; }

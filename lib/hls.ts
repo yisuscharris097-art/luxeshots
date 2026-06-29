@@ -1,5 +1,5 @@
-// Shared HLS layer for Bunny Stream reels.
-// hls.js is loaded from CDN (no npm import) so it resolves anywhere.
+// Shared HLS layer for Bunny Stream reels + a single-owner AUDIO BUS.
+// hls.js loaded from CDN (no npm import). Only ONE video may have sound at a time.
 
 export function posterFor(playlistUrl: string): string {
   return playlistUrl.replace(/playlist\.m3u8.*$/, 'thumbnail.jpg');
@@ -22,7 +22,6 @@ export function loadHls(): Promise<any> {
 
 export type HlsHandle = { destroy: () => void };
 
-/** Attach an HLS stream to a <video>. Safari uses native HLS. */
 export function attachHls(video: HTMLVideoElement, url: string): HlsHandle {
   if (video.canPlayType('application/vnd.apple.mpegurl')) {
     video.src = url;
@@ -43,23 +42,28 @@ export function attachHls(video: HTMLVideoElement, url: string): HlsHandle {
   return { destroy: () => { killed = true; if (hls) { try { hls.destroy(); } catch {} } } };
 }
 
-/* ---- Global sound unlock: first user gesture enables audio everywhere ---- */
-let unlocked = false;
+/* ───────────────── AUDIO BUS — solo un video con sonido a la vez ───────────────── */
+let currentAudio: HTMLVideoElement | null = null;
 const subs = new Set<() => void>();
-export const isSoundUnlocked = () => unlocked;
-export function onSoundUnlock(cb: () => void): () => void {
-  if (unlocked) { cb(); return () => {}; }
+const notify = () => subs.forEach((cb) => { try { cb(); } catch {} });
+
+/** Subscribe to audio-owner changes (so each player can refresh its mute icon). */
+export function subscribeAudio(cb: () => void): () => void {
   subs.add(cb);
   return () => { subs.delete(cb); };
 }
-if (typeof window !== 'undefined') {
-  const fire = () => {
-    if (unlocked) return;
-    unlocked = true;
-    subs.forEach((cb) => { try { cb(); } catch {} });
-    subs.clear();
-  };
-  ['pointerdown', 'touchstart', 'keydown'].forEach((e) =>
-    window.addEventListener(e, fire, { once: true, passive: true })
-  );
+/** Give sound to `v`, muting whoever had it. */
+export function soloAudio(v: HTMLVideoElement) {
+  if (currentAudio && currentAudio !== v) currentAudio.muted = true;
+  currentAudio = v;
+  v.muted = false;
+  v.play?.().catch(() => {});
+  notify();
 }
+/** Mute `v` and release the bus if it owned it. */
+export function dropAudio(v: HTMLVideoElement) {
+  v.muted = true;
+  if (currentAudio === v) currentAudio = null;
+  notify();
+}
+export const audioOwner = () => currentAudio;

@@ -7,8 +7,8 @@ import { posterFor } from '@/lib/hls';
 
 /* ── Reel horizontal (16:9) que va al inicio ── */
 const HERO_REEL = 'https://vz-5c81264f-e6c.b-cdn.net/1e7a339f-240e-454a-aeb7-a1690e293540/playlist.m3u8';
-/* Imagen de fondo del hero (tenue, Ken Burns). Cambiar aquí si "la chica del caballo" es esta. */
-const HERO_BG = contentDays[3]?.image || contentDays[0]?.image || '/images/og.jpeg';
+/* Imagen de fondo del hero (tenue, Ken Burns). Reemplaza a la foto del caballo. */
+const HERO_BG = '/images/luxe-event.jpeg';
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -101,7 +101,7 @@ export default function Hero() {
 
         {/* Reel horizontal de apertura (autoplay muteado + sonido al toque) */}
         <div data-h-video className="mt-6 w-full max-w-xl shadow-[0_50px_130px_-50px_rgba(0,0,0,0.85)]">
-          <HlsVideo src={HERO_REEL} poster={posterFor(HERO_REEL)} rounded autoUnmute className="aspect-video ring-1 ring-line" />
+          <HlsVideo src={HERO_REEL} poster={posterFor(HERO_REEL)} rounded className="aspect-video ring-1 ring-line" />
         </div>
 
         <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
