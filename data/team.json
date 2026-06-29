@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Andrea Mamane",
+    "vimeoLen": "00:42",
+    "image": "assets/images/team-andrea-mamane.jpeg"
+  },
+  {
+    "name": "JJ Lambert",
+    "vimeoLen": "00:36",
+    "image": "assets/images/team-jj-lambert.jpeg"
+  },
+  {
+    "name": "Kelly Louis",
+    "vimeoLen": "00:44",
+    "image": "assets/images/team-kelly-louis.jpeg"
+  },
+  {
+    "name": "Jacob Edri",
+    "vimeoLen": "00:50",
+    "image": "assets/images/team-jacob-edri.jpeg"
+  }
+]

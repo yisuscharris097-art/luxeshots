@@ -1,0 +1,28 @@
+{
+  "name": "LuxeShots",
+  "siteTitle": "LUXE Content Days",
+  "tagline": "Get a Viral Video Reel + Scroll-Stopping Headshot — Absolutely FREE",
+  "subTagline": "Top Realtors Are Paying $1,500+ for This… You Get It FREE!",
+  "hook": "Step Into Luxury. Capture Content That Converts.",
+  "metaDescription": "Book your Luxe Content Day spot inside a multimillion-dollar home. Get a high-end headshot & viral video reel to get more of what you really want-results!",
+  "colors": {
+    "gold": "#BBA15C",
+    "black": "#000000",
+    "white": "#FFFFFF",
+    "linkRed": "#FF0000"
+  },
+  "fonts": {
+    "heading": "Montserrat",
+    "body": "Lato"
+  },
+  "contact": {
+    "phone": "+1 561-570-1414",
+    "address": "12000 Forest Hill Boulevard, Wellington, FL 33414, US",
+    "instagram": "https://instagram.com/luxeshotsbyus"
+  },
+  "booking": "luxeshots.as.me (Acuity Scheduling)",
+  "events": "Eventbrite",
+  "platform": "GoHighLevel / LeadConnector funnel",
+  "logo": "assets/images/logo.png",
+  "ogImage": "assets/images/og.jpeg"
+}

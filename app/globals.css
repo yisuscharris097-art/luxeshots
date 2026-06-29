@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; --gold:#BBA15C; --gold-bright:#E3C892; --ink:#0B0B0C; }
+html { -webkit-text-size-adjust: 100%; }
+html, body { background: #0B0B0C; color: #F4F1EA; }
+body {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+::selection { background: #BBA15C; color: #0B0B0C; }
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ---- SplitText line/word masks (animated-copy engine) ---- */
+.line-mask, .word-mask { display: block; overflow: hidden; }
+.split-line, .split-word { display: block; will-change: transform; }
+.split-word { display: inline-block; }
+
+/* ---- Ken Burns (hero ambience) ---- */
+@keyframes kenburns {
+  0%   { transform: scale(1.06) translate3d(0,0,0); }
+  100% { transform: scale(1.18) translate3d(0,-1.5%,0); }
+}
+.kenburns { animation: kenburns 22s ease-out forwards; }
+@media (prefers-reduced-motion: reduce) { .kenburns { animation: none; } }
+
+/* ---- Gold custom cursor ---- */
+@media (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"], .cursor-pointer { cursor: none; }
+  #lux-cursor {
+    position: fixed; top: 0; left: 0; z-index: 10001;
+    width: 10px; height: 10px; border-radius: 999px;
+    background: var(--gold); pointer-events: none; opacity: 0;
+    transform: translate3d(var(--x,-100px), var(--y,-100px), 0) translate(-50%,-50%) scale(var(--s,1));
+    transition: opacity .25s ease, width .3s ease, height .3s ease, background .3s ease;
+    mix-blend-mode: difference; will-change: transform;
+  }
+  #lux-cursor.is-visible { opacity: 1; }
+  #lux-cursor.is-hover { width: 46px; height: 46px; background: var(--gold-bright); }
+}
+
+/* ---- Preloader (multilingual -> brand reveal) ---- */
+.lux-preloader {
+  position: fixed; inset: 0; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  background: #0B0B0C; color: #F4F1EA;
+}
+.lux-preloader__svg { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% + 320px); }
+.lux-preloader__svg path { fill: #0B0B0C; }
+.lux-preloader__word {
+  position: relative; z-index: 2; display: flex; align-items: center; gap: .8rem;
+  font-family: var(--font-serif), serif; font-style: italic; font-weight: 500;
+  font-size: clamp(2rem, 6vw, 4rem); letter-spacing: -0.01em; opacity: 0;
+}
+.lux-preloader__dot { width: 9px; height: 9px; border-radius: 999px; background: var(--gold); flex: 0 0 auto; }
+
+/* ---- Marquee + Flip bridge ---- */
+.lux-marquee { position: relative; width: 100%; height: 56svh; overflow: hidden; background: #0B0B0C; }
+.lux-marquee-wrap {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-5deg); width: 150%; height: 100%;
+}
+.lux-marquee-track {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-75%, -50%); width: 200%; height: 100%;
+  display: flex; align-items: center; gap: 1rem; will-change: transform;
+}
+.lux-marquee-img { flex: 1; aspect-ratio: 5/3; overflow: hidden; border-radius: 2px; }
+.lux-marquee-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.lux-flip-stage { position: relative; width: 100%; height: 100svh; overflow: hidden; background: #0B0B0C; }
+.lux-flip-quote {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 2rem;
+  pointer-events: none;
+}
+
+/* ---- Arc slider (team reels) ---- */
+.lux-arc { position: relative; width: 100%; height: 100svh; overflow: hidden; background: #0B0B0C; touch-action: none; }
+.lux-arc-slide { position: absolute; top: 0; left: 0; overflow: hidden; border-radius: 4px; will-change: transform, width, height; }
+.lux-arc-slide img { width: 100%; height: 100%; object-fit: cover; }
+.lux-arc-slide::after { content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(11,11,12,.55), transparent 55%); }
+.lux-arc-title {
+  position: absolute; bottom: 16svh; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-serif), serif; font-style: italic; color: var(--gold-bright);
+  font-size: clamp(1.6rem, 4vw, 3rem); white-space: nowrap; pointer-events: none;
+}
+.lux-arc-play {
+  position: absolute; left: 50%; top: 40%; transform: translate(-50%,-50%);
+  width: 70px; height: 70px; border-radius: 999px; background: rgba(187,161,92,.92);
+  color: #0B0B0C; display: grid; place-items: center; font-size: 1.4rem; pointer-events: none;
+}
+
+/* ---- Footer fluid canvas ---- */
+.lux-fluid-canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
