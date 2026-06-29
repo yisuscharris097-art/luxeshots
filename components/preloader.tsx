@@ -12,16 +12,23 @@ export default function Preloader() {
   const pathRef = useRef<SVGPathElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
+  // 1) decide on mount whether to show the preloader (renders the SVG markup)
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce || sessionStorage.getItem(SEEN) === 'true') return;
     setActive(true);
     document.documentElement.style.overflow = 'hidden';
+  }, []);
+
+  // 2) once active === true, the SVG/refs are mounted — run the animation
+  useEffect(() => {
+    if (!active) return;
+    const path = pathRef.current;
+    if (!path) return;
 
     const w = window.innerWidth, h = window.innerHeight;
     const initial = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h + 300} 0 ${h} L0 0`;
     const target = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h} 0 ${h} L0 0`;
-    const path = pathRef.current!;
     path.setAttribute('d', initial);
 
     let i = 0;
@@ -55,7 +62,7 @@ export default function Preloader() {
     });
 
     return () => { dc.kill(); document.documentElement.style.overflow = ''; };
-  }, []);
+  }, [active]);
 
   if (!active) return null;
   return (
