@@ -1,6 +1,4 @@
 'use client';
-import Reveal from './reveal';
-import Mask from './mask';
 
 const bullets = [
   'Look like a luxury agent — even before your first high-end listing',
@@ -12,33 +10,22 @@ const bullets = [
 
 export default function Invitation() {
   return (
-    <section className="bg-ink-2 py-20 md:py-28 px-5 md:px-8">
-      <div className="max-w-4xl mx-auto text-center">
-        <Reveal>
-          <span className="inline-flex items-center gap-3 text-gold uppercase tracking-[0.3em] text-xs font-semibold">
-            <span className="w-8 h-px bg-gold" /> Your Invitation <span className="w-8 h-px bg-gold" />
-          </span>
-        </Reveal>
-        <Mask as="h2" split="lines" className="mt-5 font-serif text-paper" style={{ fontSize: 'clamp(2rem,5vw,4rem)' }}>
-          This Is Your Invitation To
-        </Mask>
-
-        <ul className="mt-10 grid gap-3 text-left max-w-2xl mx-auto">
+    <section className="invite">
+      <div className="wrap--narrow center">
+        <span className="eyebrow" data-reveal="fade"><span className="rule" /> Your Invitation <span className="rule" /></span>
+        <h2 className="display display--lg" data-split style={{ marginTop: '1.2rem' }}>This Is Your Invitation To</h2>
+        <ul className="invite__list">
           {bullets.map((b, i) => (
-            <Reveal key={i} delay={i * 0.06}>
-              <li className="flex items-start gap-4 border-b border-line pb-4">
-                <span className="text-gold mt-1.5 text-sm">◆</span>
-                <span className="text-paper text-lg md:text-xl">{b}</span>
-              </li>
-            </Reveal>
+            <li className="invite__item" data-reveal="fade" data-delay={String(i * 80)} key={i}>
+              <span className="dot">◆</span><p>{b}</p>
+            </li>
           ))}
         </ul>
-
-        <Reveal delay={0.1}>
-          <a href="https://luxeshots.as.me/" target="_blank" rel="noopener noreferrer" className="mt-10 inline-block bg-gold text-ink font-sans font-bold uppercase tracking-[0.1em] text-sm px-10 py-4 transition-colors duration-300 hover:bg-gold-bright">
-            RSVP — Reserve Your Spot
+        <div data-reveal="fade" data-delay="160" style={{ marginTop: '2.6rem' }}>
+          <a className="btn is-link" href="https://luxeshots.as.me/" target="_blank" rel="noopener noreferrer">
+            RSVP — Reserve Your Spot <span className="arr">→</span>
           </a>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

@@ -1,35 +1,26 @@
 'use client';
 import { useEffect } from 'react';
 
-/** Gold custom cursor (mix-blend difference). Desktop / fine-pointer only. */
+/** Gold custom cursor (#cursor, mix-blend difference). Fine-pointer only. */
 export default function Cursor() {
   useEffect(() => {
     if (!matchMedia('(pointer: fine)').matches) return;
-    const el = document.createElement('div');
-    el.id = 'lux-cursor';
-    document.body.appendChild(el);
-
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const c = document.createElement('div');
+    c.id = 'cursor';
+    document.body.appendChild(c);
     let tx = -100, ty = -100, cx = tx, cy = ty, raf = 0;
-    const k = 0.18;
     const tick = () => {
-      cx += (tx - cx) * k;
-      cy += (ty - cy) * k;
-      el.style.setProperty('--x', `${cx}px`);
-      el.style.setProperty('--y', `${cy}px`);
+      cx += (tx - cx) * 0.18; cy += (ty - cy) * 0.18;
+      c.style.setProperty('--x', `${cx}px`); c.style.setProperty('--y', `${cy}px`);
       raf = requestAnimationFrame(tick);
     };
-    const move = (e: PointerEvent) => {
-      tx = e.clientX; ty = e.clientY;
-      el.classList.add('is-visible');
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
+    const move = (e: PointerEvent) => { tx = e.clientX; ty = e.clientY; c.classList.add('on'); if (!raf) raf = requestAnimationFrame(tick); };
     const over = (e: Event) => {
       const t = e.target as HTMLElement;
-      if (t.closest('a, button, [role="button"]')) el.classList.add('is-hover');
-      else el.classList.remove('is-hover');
+      c.classList.toggle('hot', !!t.closest('a,button,[role=button],.is-link'));
     };
-    const leave = () => el.classList.remove('is-visible');
-
+    const leave = () => c.classList.remove('on');
     addEventListener('pointermove', move, { passive: true });
     addEventListener('pointerover', over, { passive: true });
     document.addEventListener('mouseleave', leave);
@@ -38,7 +29,7 @@ export default function Cursor() {
       removeEventListener('pointermove', move);
       removeEventListener('pointerover', over);
       document.removeEventListener('mouseleave', leave);
-      el.remove();
+      c.remove();
     };
   }, []);
   return null;
