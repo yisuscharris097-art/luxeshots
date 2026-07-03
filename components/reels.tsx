@@ -10,6 +10,10 @@ const REELS = [
   { name: 'Jacob Edri',    url: `${HOST}/7621b373-5a25-4f82-923c-785972dd7344/playlist.m3u8` },
 ];
 
+const IconPlay = () => (<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>);
+const IconVolOn = () => (<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>);
+const IconVolOff = () => (<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4z" /><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" /></svg>);
+
 export default function Reels() {
   const [reduce, setReduce] = useState(false);
   const [center, setCenter] = useState(0);
@@ -33,6 +37,8 @@ export default function Reels() {
     if (!v || handles.current[i]) return;
     v.muted = true;
     handles.current[i] = attachHls(v, REELS[i].url);
+    v.addEventListener('playing', () => cardRefs.current[i]?.classList.add('is-playing'));
+    v.addEventListener('pause', () => cardRefs.current[i]?.classList.remove('is-playing'));
     v.addEventListener('canplay', () => { if (centerRef.current === i) safePlay(v); }, { once: true });
   };
 
@@ -103,12 +109,13 @@ export default function Reels() {
   const go = (dir: number) => { target.current = Math.max(0, Math.min(REELS.length - 1, Math.round(current.current) + dir)); lastInteract.current = performance.now(); };
   const onCardClick = (i: number) => {
     if (moved.current) return;
-    target.current = i; lastInteract.current = performance.now();
+    if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); return; }
     ensure(i); const v = videoRefs.current[i]; if (v) { soloAudio(v); setActive(true); }
   };
-  const toggleSound = (e: React.MouseEvent) => {
+  const toggleSound = (e: React.MouseEvent, i: number) => {
     e.stopPropagation();
-    const v = videoRefs.current[center]; if (!v) return;
+    if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); ensure(i); const v = videoRefs.current[i]; if (v) { soloAudio(v); setActive(true); } return; }
+    const v = videoRefs.current[i]; if (!v) return;
     if (v.muted) { soloAudio(v); setActive(true); } else { dropAudio(v); setActive(false); }
   };
 
@@ -128,7 +135,8 @@ export default function Reels() {
         <div className="wrap" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '1rem', marginTop: '2.5rem' }}>
           {REELS.map((r, i) => (
             <div key={i} className="reel-card" style={{ position: 'relative', width: '100%' }}>
-              <video poster={posterFor(r.url)} playsInline loop muted preload="none"
+              <div className="ph" style={{ backgroundImage: `url(${posterFor(r.url)})` }} />
+              <video playsInline loop muted preload="none"
                 ref={(el) => { if (el) { videoRefs.current[i] = el; ensure(i); } }} />
               <div className="name">{r.name}</div>
             </div>
@@ -137,22 +145,27 @@ export default function Reels() {
       ) : (
         <>
           <div className="reel-stage" ref={stageRef}>
-            <button className="reel-arrow l is-link" aria-label="Previous reel" onClick={() => go(-1)}>‹</button>
-            <button className="reel-arrow r is-link" aria-label="Next reel" onClick={() => go(1)}>›</button>
+            <button className="reel-arrow l is-link" aria-label="Previous reel" onClick={() => go(-1)}>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
+            <button className="reel-arrow r is-link" aria-label="Next reel" onClick={() => go(1)}>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            </button>
             <div className="reel-track">
               {REELS.map((r, i) => (
                 <div key={i} className="reel-card" ref={(el) => { if (el) cardRefs.current[i] = el; }} onClick={() => onCardClick(i)}>
-                  <video ref={(el) => { if (el) videoRefs.current[i] = el; }} poster={posterFor(r.url)} playsInline loop preload="none" />
-                  {center === i && active && <span className="live">● Live</span>}
+                  <div className="ph" style={{ backgroundImage: `url(${posterFor(r.url)})` }} />
+                  <video ref={(el) => { if (el) videoRefs.current[i] = el; }} playsInline loop preload="none" />
+                  {center === i && active && <span className="live"><i />Live</span>}
+                  <button className="rplay is-link" aria-label={`Play ${r.name}`} onClick={(e) => toggleSound(e, i)}>
+                    {center === i ? (active ? <IconVolOn /> : <IconVolOff />) : <IconPlay />}
+                  </button>
                   <div className="name">{r.name}</div>
-                  {center === i && (
-                    <button className="vol is-link" aria-label={active ? 'Mute' : 'Unmute'} onClick={toggleSound}>{active ? '🔊' : '🔇'}</button>
-                  )}
                 </div>
               ))}
             </div>
           </div>
-          <p className="reels__cap">Drag, use the arrows, or tap a reel to play with sound</p>
+          <p className="reels__cap">Drag, use the arrows, or tap a reel to play</p>
         </>
       )}
     </section>

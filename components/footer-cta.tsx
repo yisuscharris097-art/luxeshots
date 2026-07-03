@@ -1,71 +1,91 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { brandData } from '@/lib/data';
-import { FooterFluidField } from '@/lib/footer-fluid';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Magnetic from './magnetic';
 
-function FluidCanvas() {
-  const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const canvas = ref.current; if (!canvas) return;
-    const parent = canvas.parentElement!; const ctx = canvas.getContext('2d'); if (!ctx) return;
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    let W = parent.clientWidth, H = parent.clientHeight;
-    let field = new FooterFluidField({ widthPx: W, heightPx: H, cellSizePx: 16 });
-    let particles: { x: number; y: number; ox: number; oy: number }[] = [];
-    const seed = () => {
-      particles = [];
-      const cols = Math.floor(W / 26), rows = Math.floor(H / 26);
-      for (let i = 0; i <= cols; i++) for (let j = 0; j <= rows; j++) { const x = (i / cols) * W, y = (j / rows) * H; particles.push({ x, y, ox: x, oy: y }); }
-    };
-    const size = () => {
-      W = parent.clientWidth; H = parent.clientHeight;
-      canvas.width = W * DPR; canvas.height = H * DPR; canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0); field.resize(W, H); seed();
-    };
-    size();
-    let mx = -1, my = -1, pmx = -1, pmy = -1, raf = 0, last = performance.now();
-    const move = (e: MouseEvent) => { const r = parent.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; };
-    parent.addEventListener('mousemove', move);
-    const loop = () => {
-      const now = performance.now(); const dt = Math.min((now - last) / 1000, 0.033); last = now;
-      const dx = pmx < 0 ? 0 : mx - pmx, dy = pmy < 0 ? 0 : my - pmy;
-      field.step(dt, { mouseX: mx, mouseY: my, mouseDX: dx, mouseDY: dy, mouseRadiusPx: 130, mouseStrength: 0.9 });
-      pmx = mx; pmy = my;
-      ctx.clearRect(0, 0, W, H); ctx.fillStyle = 'rgba(185,160,106,0.5)';
-      for (const p of particles) {
-        const s = field.sample(p.x, p.y);
-        p.x += s.u * dt; p.y += s.v * dt; p.x += (p.ox - p.x) * 0.012; p.y += (p.oy - p.y) * 0.012;
-        ctx.fillRect(p.x, p.y, 1.6, 1.6);
-      }
-      raf = requestAnimationFrame(loop);
-    };
-    loop();
-    window.addEventListener('resize', size);
-    return () => { cancelAnimationFrame(raf); parent.removeEventListener('mousemove', move); window.removeEventListener('resize', size); };
-  }, []);
-  return <canvas ref={ref} className="footer__canvas" aria-hidden />;
-}
+const RSVP = 'https://luxeshots.as.me/';
+const Arrow = () => (<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M4 12h15M13.5 5.5 20 12l-6.5 6.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>);
 
 export default function FooterCta() {
-  const c = brandData.contact;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // GSAP footer title scale-in
+    gsap.registerPlugin(ScrollTrigger);
+    let ctx: gsap.Context | null = null;
+    if (titleRef.current) {
+      ctx = gsap.context(() => {
+        gsap.fromTo(titleRef.current, { yPercent: 26, scale: 0.94 }, {
+          yPercent: 0, scale: 1, ease: 'none',
+          scrollTrigger: { trigger: '.footer', start: 'top 95%', end: 'top 38%', scrub: 1 },
+        });
+      });
+    }
+
+    // fluid particle drift
+    const canvas = canvasRef.current;
+    let raf = 0; let cleanup = () => {};
+    if (canvas) {
+      const parent = canvas.parentElement!;
+      const c = canvas.getContext('2d')!;
+      const DPR = Math.min(window.devicePixelRatio || 1, 2);
+      let W = 1, H = 1;
+      let pts: { x: number; y: number; ox: number; oy: number; vx: number; vy: number }[] = [];
+      let mx = -1, my = -1, pmx = -1, pmy = -1;
+      const seed = () => {
+        pts = []; const cx = Math.floor(W / 26), cy = Math.floor(H / 26);
+        for (let i = 0; i <= cx; i++) for (let j = 0; j <= cy; j++) { const x = (i / cx) * W, y = (j / cy) * H; pts.push({ x, y, ox: x, oy: y, vx: 0, vy: 0 }); }
+      };
+      const size = () => {
+        W = parent.clientWidth; H = parent.clientHeight;
+        canvas.width = W * DPR; canvas.height = H * DPR;
+        canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+        c.setTransform(DPR, 0, 0, DPR, 0, 0); seed();
+      };
+      const onMove = (e: MouseEvent) => { const r = parent.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; };
+      size();
+      parent.addEventListener('mousemove', onMove);
+      const loop = () => {
+        c.clearRect(0, 0, W, H); c.fillStyle = 'rgba(185,160,106,.5)';
+        const ddx = pmx < 0 ? 0 : mx - pmx, ddy = pmy < 0 ? 0 : my - pmy; pmx = mx; pmy = my;
+        for (const p of pts) {
+          const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+          if (mx >= 0 && d2 < 18000) { const f = 1 - d2 / 18000; p.vx += (dx / Math.sqrt(d2 + 1) * 2 + ddx * 0.4) * f; p.vy += (dy / Math.sqrt(d2 + 1) * 2 + ddy * 0.4) * f; }
+          p.vx *= 0.92; p.vy *= 0.92; p.x += p.vx; p.y += p.vy; p.x += (p.ox - p.x) * 0.02; p.y += (p.oy - p.y) * 0.02;
+          c.fillRect(p.x, p.y, 1.6, 1.6);
+        }
+        raf = requestAnimationFrame(loop);
+      };
+      loop();
+      window.addEventListener('resize', size);
+      cleanup = () => { parent.removeEventListener('mousemove', onMove); window.removeEventListener('resize', size); };
+    }
+
+    return () => { cancelAnimationFrame(raf); cleanup(); ctx?.revert(); };
+  }, []);
+
   return (
     <footer className="footer">
-      <FluidCanvas />
+      <canvas className="footer__canvas" ref={canvasRef} aria-hidden />
       <div className="footer__in wrap--narrow">
         <span className="eyebrow" data-reveal="fade">Spots Are Limited</span>
-        <h2 className="display display--xl" data-split style={{ marginTop: '1.4rem' }}>Step Into <span className="accent">Luxury.</span></h2>
+        <h2 className="display display--xl" ref={titleRef} data-split style={{ marginTop: '1.4rem' }}>Make It <span className="accent">Unforgettable.</span></h2>
         <p className="lede" data-reveal="fade" data-delay="120" style={{ maxWidth: '34rem', margin: '1.6rem auto 0' }}>
-          Book your free Luxe Content Day inside a multimillion-dollar listing — and walk away with a viral reel and a
-          scroll-stopping headshot.
+          Book your free Luxe Content Day inside a multimillion-dollar listing — and walk away with a viral
+          reel and a scroll-stopping headshot.
         </p>
         <div data-reveal="fade" data-delay="200" style={{ marginTop: '2.6rem' }}>
-          <a className="btn is-link" href="https://luxeshots.as.me/" target="_blank" rel="noopener noreferrer">Reserve Your Spot — Free <span className="arr">→</span></a>
+          <Magnetic strength={0.4}>
+            <a className="btn is-link" href={RSVP} target="_blank" rel="noopener noreferrer">Reserve Your Spot — Free <span className="arr"><Arrow /></span></a>
+          </Magnetic>
         </div>
         <div className="footer__meta">
           <div className="b">Luxe<b>Shots</b></div>
-          <p>{c.phone} · {c.address}</p>
-          <a href={c.instagram} target="_blank" rel="noopener noreferrer" className="is-link">Instagram</a>
+          <p>+1 561-570-1414 · 12000 Forest Hill Boulevard, Wellington, FL 33414</p>
+          <a href="https://instagram.com/luxeshotsbyus" target="_blank" rel="noopener noreferrer" className="is-link">Instagram</a>
           <p className="cc">© 2026 LuxeShots — LUXE Content Days · South Florida</p>
         </div>
       </div>
