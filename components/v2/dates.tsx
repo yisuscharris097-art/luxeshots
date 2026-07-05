@@ -52,7 +52,7 @@ export default function Reserve() {
         </div>
 
         <div className="e2-reserve__more">
-          <a className="e2-link" href={RSVP} target="_blank" rel="noopener noreferrer">See all dates <span className="a">→</span></a>
+          <a className="e2-btn e2-btn--ghost" href={RSVP} target="_blank" rel="noopener noreferrer">See all dates <span className="a">→</span></a>
         </div>
       </div>
     </section>

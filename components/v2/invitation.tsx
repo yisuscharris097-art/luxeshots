@@ -12,7 +12,7 @@ export default function Invitation() {
             reel and a scroll-stopping headshot. Spots are limited.
           </p>
           <div className="e2-invite__cta" data-fade data-delay="300">
-            <a className="e2-link" href={RSVP} target="_blank" rel="noopener noreferrer">Reserve your spot <span className="a">→</span></a>
+            <a className="e2-btn" href={RSVP} target="_blank" rel="noopener noreferrer">Reserve your spot <span className="a">→</span></a>
           </div>
         </div>
       </section>

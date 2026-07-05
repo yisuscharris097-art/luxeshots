@@ -1,4 +1,5 @@
 import Hero from '@/components/v2/hero';
+import Marquee from '@/components/v2/marquee';
 import Statement from '@/components/v2/statement';
 import Reserve from '@/components/v2/dates';
 import Work from '@/components/v2/work';
@@ -10,6 +11,7 @@ export default function V2Page() {
   return (
     <main>
       <Hero />
+      <Marquee />
       <Statement />
       <Reserve />
       <Work />
