@@ -18,10 +18,13 @@ export default function HlsVideo({
     if (!v) return;
     v.muted = true;
     const handle = attachHls(v, src);
+    // Play while ANY part is on screen; pause only when fully out of view.
+    // (Avoids the video pausing/replaying — and appearing to "restart" — while
+    //  scrolling near a fixed visibility threshold.)
     const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) v.play().catch(() => {});
-      else v.pause();
-    }, { threshold: 0.25 });
+      if (e.isIntersecting) { if (v.paused) v.play().catch(() => {}); }
+      else if (!v.paused) v.pause();
+    }, { threshold: 0 });
     io.observe(v);
     const off = subscribeAudio(() => setMuted(v.muted));
     return () => { io.disconnect(); off(); handle.destroy(); };
