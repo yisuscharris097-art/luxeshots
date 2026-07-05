@@ -1,12 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import SmoothScroll from '@/components/smooth-scroll';
-import Preloader from '@/components/preloader';
-import Cursor from '@/components/cursor';
-import Grain from '@/components/grain';
-import ScrollProgress from '@/components/scroll-progress';
-import Nav from '@/components/nav';
-import RhythmEngine from '@/components/rhythm-engine';
 
 export const metadata: Metadata = {
   title: 'LuxeShots — LUXE Content Days | Viral Reels & Headshots for Realtors',
@@ -25,15 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body id="top">
-        <Preloader />
-        <Grain />
-        <ScrollProgress />
-        <Cursor />
-        <Nav />
-        <SmoothScroll>{children}</SmoothScroll>
-        <RhythmEngine />
-      </body>
+      <body id="top">{children}</body>
     </html>
   );
 }
