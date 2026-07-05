@@ -29,6 +29,7 @@ export default function Reels() {
   const dragging = useRef(false);
   const moved = useRef(false);
   const lastInteract = useRef(0);
+  const wantSound = useRef(false);   // once the user enables sound, the center reel keeps it
 
   useEffect(() => { setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches); }, []);
 
@@ -43,13 +44,16 @@ export default function Reels() {
   };
 
   const setCenterVideo = (i: number) => {
-    ensure(i); setActive(false);
+    ensure(i);
     videoRefs.current.forEach((v, k) => {
       if (!v) return;
-      if (k === i) { v.muted = true; safePlay(v); }
-      else { v.pause(); if (audioOwner() === v) dropAudio(v); else v.muted = true; }
+      if (k === i) {
+        if (wantSound.current) soloAudio(v);   // sound follows the centered reel
+        else { v.muted = true; safePlay(v); }
+      } else { v.pause(); if (audioOwner() === v) dropAudio(v); else v.muted = true; }
     });
     setCenter(i);
+    setActive(wantSound.current);
   };
 
   useEffect(() => subscribeAudio(() => {
@@ -82,6 +86,12 @@ export default function Reels() {
       current.current += (target.current - current.current) * 0.09; layout(); raf = requestAnimationFrame(loop);
     };
     loop();
+    // pause reels when the section leaves the viewport; resume the center on return
+    const vis = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { const c = clamp(Math.round(current.current)); const v = videoRefs.current[c]; if (v) safePlay(v); }
+      else { videoRefs.current.forEach((v) => v && v.pause()); }
+    }, { threshold: 0.2 });
+    vis.observe(stage);
     const onWheel = (e: WheelEvent) => { e.preventDefault(); target.current = clamp(target.current + e.deltaY * 0.0045); lastInteract.current = performance.now(); };
     let downX = 0, downT = 0;
     const onDown = (e: PointerEvent) => { dragging.current = true; moved.current = false; downX = e.clientX; downT = target.current; lastInteract.current = performance.now(); };
@@ -95,6 +105,7 @@ export default function Reels() {
     window.addEventListener('resize', onResize);
     return () => {
       cancelAnimationFrame(raf);
+      vis.disconnect();
       stage.removeEventListener('wheel', onWheel);
       stage.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointermove', onMove);
@@ -107,16 +118,23 @@ export default function Reels() {
   }, [reduce]);
 
   const go = (dir: number) => { target.current = Math.max(0, Math.min(REELS.length - 1, Math.round(current.current) + dir)); lastInteract.current = performance.now(); };
+  const enableSound = (i: number) => {
+    ensure(i); const v = videoRefs.current[i]; if (!v) return;
+    wantSound.current = true; soloAudio(v); setActive(true);
+  };
+  // tap a card: center it if it isn't; tapping the centered card turns sound on
   const onCardClick = (i: number) => {
     if (moved.current) return;
     if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); return; }
-    ensure(i); const v = videoRefs.current[i]; if (v) { soloAudio(v); setActive(true); }
+    enableSound(i);
   };
+  // volume icon: first tap unmutes (and keeps sound on the center from now on); tap again mutes
   const toggleSound = (e: React.MouseEvent, i: number) => {
     e.stopPropagation();
-    if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); ensure(i); const v = videoRefs.current[i]; if (v) { soloAudio(v); setActive(true); } return; }
+    if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); enableSound(i); return; }
     const v = videoRefs.current[i]; if (!v) return;
-    if (v.muted) { soloAudio(v); setActive(true); } else { dropAudio(v); setActive(false); }
+    if (v.muted) { wantSound.current = true; soloAudio(v); setActive(true); }
+    else { wantSound.current = false; dropAudio(v); setActive(false); }
   };
 
   return (

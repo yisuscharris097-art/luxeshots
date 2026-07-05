@@ -8,7 +8,6 @@ import { posterFor } from '@/lib/hls';
 import Magnetic from './magnetic';
 
 const HERO_REEL = 'https://vz-5c81264f-e6c.b-cdn.net/1e7a339f-240e-454a-aeb7-a1690e293540/playlist.m3u8';
-const HERO_BG = '/images/luxe-event.jpeg';
 
 export default function Hero() {
   const rsvp = contentDays[0]?.rsvp || 'https://luxeshots.as.me/';
@@ -34,9 +33,7 @@ export default function Hero() {
 
   return (
     <section className="hero">
-      <div className="hero__bg" data-parallax="0.22" aria-hidden>
-        <img src={HERO_BG} alt="" />
-      </div>
+      <div className="hero__bg" data-parallax="0.22" aria-hidden />
 
       <div className="hero__inner">
         <span className="hero__eyebrow">
@@ -44,7 +41,7 @@ export default function Hero() {
         </span>
 
         <h1 data-split>
-          A viral video reel &amp; a <span className="accent">scroll-stopping</span> headshot — absolutely <span className="free">free</span>
+          A viral video reel &amp; a <span className="accent">scroll-stopping</span> headshot — absolutely <span className="free">FREE</span>
         </h1>
 
         <p className="hero__sub lede" data-reveal="fade" data-delay="120">

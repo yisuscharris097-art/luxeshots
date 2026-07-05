@@ -35,8 +35,8 @@ export default function HlsVideo({
 
   return (
     <div className={`relative overflow-hidden ${rounded ? 'rounded-sm' : ''} ${className || ''}`}>
-      <video ref={ref} poster={poster} playsInline loop muted preload="metadata"
-        className="h-full w-full object-cover" />
+      <video ref={ref} poster={poster} playsInline loop muted preload="metadata" onClick={toggle}
+        className="h-full w-full object-cover cursor-pointer" />
       <button onClick={toggle} aria-label={muted ? 'Activar sonido' : 'Silenciar'}
         className="absolute bottom-3 right-3 z-10 grid place-items-center w-11 h-11 rounded-full bg-ink/65 backdrop-blur text-paper ring-1 ring-line transition-colors hover:bg-gold hover:text-ink">
         <span className="text-base leading-none">{muted ? '🔇' : '🔊'}</span>
