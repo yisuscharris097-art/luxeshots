@@ -44,7 +44,7 @@ export default function Hero() {
         </span>
 
         <h1 data-split>
-          A viral video reel &amp; a <span className="accent">scroll-stopping</span> headshot — absolutely <span className="free">FREE</span>
+          A viral video reel &amp; a <span className="accent">scroll-stopping</span> headshot — absolutely <span className="free">free</span>
         </h1>
 
         <p className="hero__sub lede" data-reveal="fade" data-delay="120">

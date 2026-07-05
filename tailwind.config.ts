@@ -16,7 +16,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
-        display: ['Sora', 'system-ui', 'sans-serif'],
+        display: ['Fraunces', 'Georgia', 'serif'],
       },
     },
   },
