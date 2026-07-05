@@ -20,6 +20,7 @@ export default function HlsVideo({
   const ref = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
   const firstUnmute = useRef(true);
+  const lastToggle = useRef(0);
 
   useEffect(() => {
     const v = ref.current;
@@ -53,12 +54,20 @@ export default function HlsVideo({
     }
     setMuted(v.muted);
   };
+  // fire on pointerup AND click, deduped — reliable across touch/mouse.
+  const onToggle = () => {
+    const now = performance.now();
+    if (now - lastToggle.current < 350) return;
+    lastToggle.current = now;
+    toggle();
+  };
 
   return (
     <div className={`relative overflow-hidden ${rounded ? 'rounded-sm' : ''} ${className || ''}`}>
-      <video ref={ref} poster={poster} playsInline loop muted preload="metadata" onClick={toggle}
+      <video ref={ref} poster={poster} playsInline loop muted preload="metadata"
+        onPointerUp={onToggle} onClick={onToggle}
         className="h-full w-full object-cover cursor-pointer" />
-      <button onPointerDown={(e) => e.stopPropagation()} onClick={toggle}
+      <button onPointerDown={(e) => e.stopPropagation()} onPointerUp={onToggle} onClick={onToggle}
         aria-label={muted ? 'Activar sonido' : 'Silenciar'}
         className={`snd-btn is-link${muted ? ' snd-pulse' : ''}`}>
         {muted ? <IconVolOff /> : <IconVolOn />}

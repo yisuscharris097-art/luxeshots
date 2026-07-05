@@ -30,6 +30,7 @@ export default function Reels() {
   const moved = useRef(false);
   const lastInteract = useRef(0);
   const wantSound = useRef(false);   // once the user enables sound, the center reel keeps it
+  const lastToggle = useRef(0);      // dedupe pointerup + click firing together
 
   useEffect(() => { setReduce(window.matchMedia('(prefers-reduced-motion: reduce)').matches); }, []);
 
@@ -81,9 +82,17 @@ export default function Reels() {
       const ci = clamp(Math.round(c));
       if (ci !== centerRef.current) { centerRef.current = ci; setCenterVideo(ci); }
     };
+    let rendered = NaN;
     const loop = () => {
       if (!dragging.current) { const idle = performance.now() - lastInteract.current; if (idle > 90) target.current += (Math.round(target.current) - target.current) * 0.12; }
-      current.current += (target.current - current.current) * 0.09; layout(); raf = requestAnimationFrame(loop);
+      const diff = target.current - current.current;
+      // Snap to the target once close enough so the cards STOP micro-moving when
+      // settled — a perpetually-animating card makes the browser drop taps on the
+      // sound button. When nothing changed we skip the DOM write entirely.
+      if (!dragging.current && Math.abs(diff) < 0.0015) current.current = target.current;
+      else current.current += diff * 0.09;
+      if (current.current !== rendered) { rendered = current.current; layout(); }
+      raf = requestAnimationFrame(loop);
     };
     loop();
     // pause reels when the section leaves the viewport; resume the center on return
@@ -134,12 +143,20 @@ export default function Reels() {
     enableSound(i);
   };
   // volume icon: first tap unmutes (and keeps sound on the center from now on); tap again mutes
-  const toggleSound = (e: React.MouseEvent, i: number) => {
+  const toggleSound = (e: React.MouseEvent | React.PointerEvent, i: number) => {
     e.stopPropagation();
     if (i !== centerRef.current) { target.current = i; lastInteract.current = performance.now(); enableSound(i); return; }
     const v = videoRefs.current[i]; if (!v) return;
     if (v.muted) { wantSound.current = true; soloAudio(v); setActive(true); }
     else { wantSound.current = false; dropAudio(v); setActive(false); }
+  };
+  // fire on pointerup AND click, deduped — so a tap works even if the browser
+  // suppresses the synthetic click (movement, touch, etc.).
+  const onSndBtn = (e: React.MouseEvent | React.PointerEvent, i: number) => {
+    const now = performance.now();
+    if (now - lastToggle.current < 350) { e.stopPropagation(); return; }
+    lastToggle.current = now;
+    toggleSound(e, i);
   };
 
   return (
@@ -184,7 +201,8 @@ export default function Reels() {
                     className={`snd-btn is-link${center === i && !active ? ' snd-pulse' : ''}`}
                     aria-label={center === i && active ? `Mute ${r.name}` : `Play ${r.name} with sound`}
                     onPointerDown={(e) => e.stopPropagation()}
-                    onClick={(e) => toggleSound(e, i)}>
+                    onPointerUp={(e) => onSndBtn(e, i)}
+                    onClick={(e) => onSndBtn(e, i)}>
                     {center === i ? (active ? <IconVolOn /> : <IconVolOff />) : <IconPlay />}
                   </button>
                   <div className="name">{r.name}</div>
