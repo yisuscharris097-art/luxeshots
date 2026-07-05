@@ -66,7 +66,7 @@ export default function Reels() {
     const stage = stageRef.current;
     if (!stage) return;
     const N = REELS.length;
-    let W = stage.clientWidth, spacing = Math.min(W * 0.3, 340), raf = 0;
+    let W = stage.clientWidth, spacing = Math.min(W * 0.36, 480), raf = 0;
     const clamp = (v: number) => Math.max(0, Math.min(N - 1, v));
     const layout = () => {
       const c = current.current;
@@ -94,10 +94,15 @@ export default function Reels() {
     vis.observe(stage);
     const onWheel = (e: WheelEvent) => { e.preventDefault(); target.current = clamp(target.current + e.deltaY * 0.0045); lastInteract.current = performance.now(); };
     let downX = 0, downT = 0;
-    const onDown = (e: PointerEvent) => { dragging.current = true; moved.current = false; downX = e.clientX; downT = target.current; lastInteract.current = performance.now(); };
+    const onDown = (e: PointerEvent) => {
+      // don't start a coverflow drag when the press begins on the sound button —
+      // otherwise the card shifts and the browser cancels the button's click.
+      if ((e.target as HTMLElement)?.closest?.('.snd-btn')) return;
+      dragging.current = true; moved.current = false; downX = e.clientX; downT = target.current; lastInteract.current = performance.now();
+    };
     const onMove = (e: PointerEvent) => { if (!dragging.current) return; const dx = e.clientX - downX; if (Math.abs(dx) > 8) moved.current = true; target.current = clamp(downT - dx / spacing); lastInteract.current = performance.now(); };
     const onUp = () => { dragging.current = false; target.current = clamp(Math.round(target.current)); lastInteract.current = performance.now(); };
-    const onResize = () => { W = stage.clientWidth; spacing = Math.min(W * 0.3, 340); };
+    const onResize = () => { W = stage.clientWidth; spacing = Math.min(W * 0.36, 480); };
     stage.addEventListener('wheel', onWheel, { passive: false });
     stage.addEventListener('pointerdown', onDown);
     window.addEventListener('pointermove', onMove);
@@ -175,7 +180,11 @@ export default function Reels() {
                   <div className="ph" style={{ backgroundImage: `url(${posterFor(r.url)})` }} />
                   <video ref={(el) => { if (el) videoRefs.current[i] = el; }} playsInline loop preload="none" />
                   {center === i && active && <span className="live"><i />Live</span>}
-                  <button className="rplay is-link" aria-label={`Play ${r.name}`} onClick={(e) => toggleSound(e, i)}>
+                  <button
+                    className={`snd-btn is-link${center === i && !active ? ' snd-pulse' : ''}`}
+                    aria-label={center === i && active ? `Mute ${r.name}` : `Play ${r.name} with sound`}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => toggleSound(e, i)}>
                     {center === i ? (active ? <IconVolOn /> : <IconVolOff />) : <IconPlay />}
                   </button>
                   <div className="name">{r.name}</div>
