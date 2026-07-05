@@ -11,13 +11,15 @@ export default function Shell() {
     document.body.classList.add('v2-on');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // progress hairline
+    // progress hairline + masthead solid-on-scroll
     const bar = document.getElementById('v2-progress');
+    const mast = document.querySelector('.e2-mast');
     let raf = 0;
     const tick = () => {
       const h = document.documentElement;
       const max = h.scrollHeight - h.clientHeight;
       if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(1, h.scrollTop / max) : 0})`;
+      if (mast) mast.classList.toggle('solid', h.scrollTop > 40);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);

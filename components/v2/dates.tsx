@@ -17,38 +17,44 @@ export default function Reserve() {
   const list = (up.length >= 4 ? up : all.sort((a, b) => a.t - b.t)).slice(0, 6);
 
   return (
-    <section className="e2-sec e2-light" id="reserve">
+    <section className="e2-sec" id="reserve">
       <div className="e2-wrap">
         <div className="e2-reserve__head">
           <div>
             <span className="e2-kick" data-slide>02 — The Dates</span>
-            <h2 className="e2-disp e2-lg" data-slide data-delay="60" style={{ marginTop: '1rem' }}>Reserve a date.</h2>
+            <h2 className="e2-disp e2-xl" data-slide data-delay="60" style={{ marginTop: '1.2rem' }}>Reserve a date.</h2>
           </div>
-          <p className="e2-lede" data-fade data-delay="150" style={{ maxWidth: '25rem' }}>
+          <p className="e2-lede" data-fade data-delay="150" style={{ maxWidth: '24rem' }}>
             Pick a listing. Each session yields a complete content library — yours, free.
           </p>
         </div>
 
-        <div className="e2-grid">
+        <div className="e2-plates">
           {list.map((c, i) => (
-            <a className="e2-card" data-slide data-delay={i * 80} key={i} href={c.rsvp || RSVP} target="_blank" rel="noopener noreferrer">
-              <div className="e2-card__img">
-                <i style={{ backgroundImage: `url(${c.image})` }} />
-                <span className="e2-card__n">N°0{i + 1}</span>
-                {c.commercial && <span className="e2-card__tag">Commercial</span>}
+            <a className="e2-plate" data-slide data-delay={i * 90} key={i} href={c.rsvp || RSVP} target="_blank" rel="noopener noreferrer">
+              <div className="e2-plate__top">
+                <span className="e2-plate__n">N°{String(i + 1).padStart(2, '0')}</span>
+                <span className="e2-plate__date">{shortDate(c.date)}</span>
               </div>
-              <div className="e2-card__body">
-                <span className="e2-card__city">{c.city}</span>
-                <span className="e2-card__price">{c.price}</span>
-                <span className="e2-card__date">{shortDate(c.date)}</span>
-                <span className="e2-card__addr">{c.address}</span>
-                <span className="e2-card__go">Reserve this date <span className="a">→</span></span>
+              <div className="e2-plate__img">
+                <i style={{ backgroundImage: `url(${c.image})` }} />
+                {c.commercial && <span className="e2-plate__tag">Commercial</span>}
+              </div>
+              <div className="e2-plate__body">
+                <div>
+                  <div className="e2-plate__city">{c.city}</div>
+                  <div className="e2-plate__addr">{c.address}</div>
+                  <span className="e2-plate__go">Reserve this date <span className="a">→</span></span>
+                </div>
+                <div className="e2-plate__price">{c.price}</div>
               </div>
             </a>
           ))}
         </div>
 
-        <a className="e2-reserve__more" href={RSVP} target="_blank" rel="noopener noreferrer">See all dates <span>→</span></a>
+        <div className="e2-reserve__more">
+          <a className="e2-link" href={RSVP} target="_blank" rel="noopener noreferrer">See all dates <span className="a">→</span></a>
+        </div>
       </div>
     </section>
   );

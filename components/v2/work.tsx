@@ -10,12 +10,12 @@ const REELS = [
 
 export default function Work() {
   return (
-    <section className="e2-sec e2-dark" id="work">
+    <section className="e2-sec e2-tint" id="work">
       <div className="e2-wrap">
         <div className="e2-work__head">
           <div>
             <span className="e2-kick" data-slide>03 — The Work</span>
-            <h2 className="e2-disp e2-lg" data-slide data-delay="60" style={{ marginTop: '1rem' }}>
+            <h2 className="e2-disp e2-xl" data-slide data-delay="60" style={{ marginTop: '1.2rem' }}>
               What is your content saying about you?
             </h2>
           </div>
@@ -27,9 +27,13 @@ export default function Work() {
         <div className="e2-reels">
           {REELS.map((r, i) => (
             <figure className="e2-reel" data-slide data-delay={i * 90} key={i}>
-              <ColorVideo src={r.url} className="fill" />
-              <span className="n">N°0{i + 1}</span>
-              <figcaption>{r.name}</figcaption>
+              <div className="e2-reel__media">
+                <ColorVideo src={r.url} className="fill" />
+              </div>
+              <figcaption className="e2-reel__cap">
+                <span className="e2-reel__name">{r.name}</span>
+                <span className="e2-reel__n">N°0{i + 1}</span>
+              </figcaption>
             </figure>
           ))}
         </div>

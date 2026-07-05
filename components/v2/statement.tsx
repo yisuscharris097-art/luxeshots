@@ -1,12 +1,14 @@
 export default function Statement() {
   return (
-    <section className="e2-sec e2-light e2-statement">
+    <section className="e2-sec e2-statement">
       <div className="e2-wrap e2-statement__row">
-        <span className="e2-statement__n" data-slide>01</span>
+        <div className="e2-statement__k">
+          <span className="e2-kick" data-slide>Statement</span>
+          <span className="e2-num" data-fade data-delay="90">01</span>
+        </div>
         <div>
-          <span className="e2-kick" data-slide data-delay="40">Statement</span>
-          <p data-slide data-delay="90" style={{ marginTop: '1.2rem' }}>
-            Content that doesn&rsquo;t just look expensive — content that <b>converts</b>.
+          <p data-slide data-delay="60">
+            Content that doesn&rsquo;t merely look expensive — content that <b>converts</b>.
           </p>
           <small data-fade data-delay="260">
             Every Luxe Content Day is directed end to end: a styling consultation, a multimillion-dollar

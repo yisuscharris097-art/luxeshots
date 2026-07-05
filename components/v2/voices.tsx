@@ -2,7 +2,7 @@ import { reviewsData } from '@/lib/data';
 
 export default function Voices() {
   return (
-    <section className="e2-sec e2-dark">
+    <section className="e2-sec e2-tint">
       <div className="e2-wrap">
         <span className="e2-kick" data-slide>04 — Loved by realtors</span>
         <div className="e2-voices__grid">
