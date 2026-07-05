@@ -287,6 +287,26 @@ svg{display:block}
 .rev blockquote{margin-top:1rem;flex:1;line-height:1.65;font-family:var(--font-display);font-weight:400;font-size:1.02rem}
 .rev figcaption{margin-top:1.2rem;color:var(--muted);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600}
 
+/* telescope (GSAP pin + scrub) — "Step Into Luxury" set-piece, Sora bold */
+.telescope{position:relative;height:100svh;overflow:hidden;background:var(--ink);display:flex;align-items:center;justify-content:center;--p:0}
+.tele-media{position:absolute;inset:0;z-index:1;transform:scale(var(--p));will-change:transform}
+.tele-layer{position:absolute;inset:0;background-size:cover;background-position:center}
+.tele-front{-webkit-mask-image:radial-gradient(circle at 50% 50%,#000 42%,transparent 72%);mask-image:radial-gradient(circle at 50% 50%,#000 42%,transparent 72%);-webkit-mask-size:cover;mask-size:cover}
+.tele-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.45),rgba(11,11,12,.12) 40%,rgba(11,11,12,.72))}
+.tele-words{position:relative;z-index:5;width:100%;text-align:center;pointer-events:none;display:flex;justify-content:center;gap:.28em;
+  font-family:var(--font-display);font-weight:800;font-size:clamp(2.6rem,11vw,9.2rem);line-height:1;letter-spacing:-.02em}
+.tele-words .l{transform:translate3d(calc(var(--p)*(-58vw + 100%) - .5vw),0,0)}
+.tele-words .r{transform:translate3d(calc(var(--p)*(58vw - 100%)),0,0);color:var(--gold-2);font-weight:800}
+.tele-small{position:absolute;inset:0;perspective:100vh;z-index:3;pointer-events:none}
+.tele-small i{position:absolute;width:12vw;aspect-ratio:3/4;border-radius:3px;background-size:cover;background-position:center;box-shadow:0 24px 70px -22px rgba(0,0,0,.8);display:block}
+.tele-small i:nth-of-type(1){top:15vw;left:-3vw}.tele-small i:nth-of-type(2){top:5vw;left:18vw}
+.tele-small i:nth-of-type(3){top:8vw;left:30vw}.tele-small i:nth-of-type(4){top:18vw;right:18vw}
+.tele-small i:nth-of-type(5){top:5vw;right:9vw}.tele-small i:nth-of-type(6){bottom:5vw;left:9vw}
+.tele-small i:nth-of-type(7){bottom:8vw;left:24vw}.tele-small i:nth-of-type(8){bottom:3vw;left:46vw}
+.tele-small i:nth-of-type(9){bottom:5vw;right:16vw}.tele-small i:nth-of-type(10){bottom:9vw;right:6vw}
+.tele-msg{position:absolute;bottom:7vh;left:50%;transform:translateX(-50%);z-index:6;width:90%;max-width:680px;text-align:center;opacity:0}
+@media (max-width:768px){.tele-small i{width:26vw}}
+
 /* footer cta */
 .footer{position:relative;background:var(--ink);border-top:1px solid var(--line);overflow:hidden;padding:clamp(6rem,13vh,9rem) 0}
 .footer__canvas{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
