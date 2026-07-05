@@ -21,7 +21,7 @@ export default function Reserve() {
       <div className="e2-wrap">
         <div className="e2-reserve__head">
           <div>
-            <span className="e2-kick" data-slide>02 — The Dates</span>
+            <span className="e2-kick" data-slide>The Dates</span>
             <h2 className="e2-disp e2-xl" data-slide data-delay="60" style={{ marginTop: '1.2rem' }}>Reserve a date.</h2>
           </div>
           <p className="e2-lede" data-fade data-delay="150" style={{ maxWidth: '24rem' }}>
@@ -33,12 +33,11 @@ export default function Reserve() {
           {list.map((c, i) => (
             <a className="e2-plate" data-slide data-delay={i * 90} key={i} href={c.rsvp || RSVP} target="_blank" rel="noopener noreferrer">
               <div className="e2-plate__top">
-                <span className="e2-plate__n">N°{String(i + 1).padStart(2, '0')}</span>
                 <span className="e2-plate__date">{shortDate(c.date)}</span>
+                {c.commercial && <span className="e2-plate__date">Commercial</span>}
               </div>
               <div className="e2-plate__img">
                 <i style={{ backgroundImage: `url(${c.image})` }} />
-                {c.commercial && <span className="e2-plate__tag">Commercial</span>}
               </div>
               <div className="e2-plate__body">
                 <div>

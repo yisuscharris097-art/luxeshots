@@ -48,6 +48,17 @@ body.v2-on{ background:#F5F3EE; cursor:auto; }
 .v2 .e2-wrap{width:100%;max-width:none;margin:0;padding-inline:var(--pad)}
 .v2 .e2-sec{padding-block:clamp(5.5rem,14vh,12rem)}
 .v2 .e2-tint{background:var(--paper-2)}
+/* dark block — remaps tokens so the gallery type/lines invert cleanly on black */
+.v2 .e2-dark{
+  background:#141312; color:#F5F3EE;
+  --ink:#F5F3EE;
+  --ink-soft:#D8D5CC;
+  --grey:#B2AFA5;
+  --grey-2:#7C7A72;
+  --line:rgba(245,243,238,.17);
+  --line-2:rgba(245,243,238,.08);
+}
+.v2 .e2-dark ::selection{background:var(--paper);color:#141312}
 .v2 .e2-rule{height:1px;background:var(--line);margin-inline:var(--pad)}
 
 /* ---------- signature reveals (slide-down) ---------- */

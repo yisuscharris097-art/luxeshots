@@ -1,10 +1,9 @@
 export default function Statement() {
   return (
-    <section className="e2-sec e2-statement">
+    <section className="e2-sec e2-dark e2-statement">
       <div className="e2-wrap e2-statement__row">
         <div className="e2-statement__k">
           <span className="e2-kick" data-slide>Statement</span>
-          <span className="e2-num" data-fade data-delay="90">01</span>
         </div>
         <div>
           <p data-slide data-delay="60">

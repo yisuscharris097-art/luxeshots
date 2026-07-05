@@ -9,7 +9,6 @@ export default function Hero() {
     <section className="e2-hero">
       <div className="e2-wrap">
         <div className="e2-hero__top" data-slide>
-          <span className="n">N°02</span>
           <span className="e2-kick">The Content Days Edition — South Florida</span>
         </div>
 
@@ -32,7 +31,7 @@ export default function Hero() {
           <div className="e2-hero__media">
             <ColorVideo src={HERO_REEL} className="fill" />
           </div>
-          <div className="e2-cap"><span>Showreel — tap for sound</span><span>N°01</span></div>
+          <div className="e2-cap"><span>Showreel — tap for sound</span><span>Wellington · Palm Beach</span></div>
         </div>
       </div>
     </section>

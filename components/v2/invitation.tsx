@@ -5,7 +5,7 @@ export default function Invitation() {
     <>
       <section className="e2-sec e2-invite">
         <div className="e2-wrap">
-          <span className="e2-kick" data-slide>05 — Your invitation</span>
+          <span className="e2-kick" data-slide>Your invitation</span>
           <h2 className="e2-disp" data-slide data-delay="90">Make it unforgettable, <span className="free">for free</span>.</h2>
           <p data-fade data-delay="220">
             Book your free Luxe Content Day inside a multimillion-dollar listing and walk away with a viral
@@ -28,7 +28,7 @@ export default function Invitation() {
         </div>
         <div className="e2-foot__cc">
           <span>© 2026 LuxeShots — LUXE Content Days · South Florida</span>
-          <span>Edition N°02 — The Gallery</span>
+          <span>The Content Days Edition</span>
         </div>
       </footer>
     </>
