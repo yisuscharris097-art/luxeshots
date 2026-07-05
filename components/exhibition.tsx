@@ -98,7 +98,8 @@ export default function Exhibition() {
       <div className="exh-pin" ref={pinRef}>
         <div className="exh-track" ref={trackRef}>
           {list.map((c, i) => (
-            <article className="card" key={i}>
+            <article className="card is-link" key={i}
+              onClick={() => window.open(c.rsvp || RSVP, '_blank', 'noopener')}>
               <div className="card__img" style={{ backgroundImage: `url(${c.image})` }} />
               <div className="card__veil" /><div className="card__frame" />
               <div className="card__top">
@@ -110,7 +111,7 @@ export default function Exhibition() {
                 <div className="card__city">{c.city}</div>
                 <div className="card__addr">{c.address}</div>
                 <CD t={c.t} />
-                <a className="card__cta is-link" href={c.rsvp || RSVP} target="_blank" rel="noopener noreferrer">
+                <a className="card__cta is-link" href={c.rsvp || RSVP} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
                   <span>Reserve this date</span><span className="cta-arr"><Arrow /></span>
                 </a>
               </div>

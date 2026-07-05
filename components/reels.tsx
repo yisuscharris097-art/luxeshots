@@ -95,13 +95,14 @@ export default function Reels() {
       raf = requestAnimationFrame(loop);
     };
     loop();
-    // pause reels when the section leaves the viewport; resume the center on return
+    // Keep the centered reel (and its sound) playing through normal scrolling;
+    // only pause once the section is well past the viewport (big margin), so a
+    // small scroll up/down never cuts the audio. Resume the center on return.
     const vis = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { const c = clamp(Math.round(current.current)); const v = videoRefs.current[c]; if (v) safePlay(v); }
+      if (e.isIntersecting) { const c = clamp(Math.round(current.current)); const v = videoRefs.current[c]; if (v && v.paused) safePlay(v); }
       else { videoRefs.current.forEach((v) => v && v.pause()); }
-    }, { threshold: 0.2 });
+    }, { threshold: 0, rootMargin: '600px 0px 600px 0px' });
     vis.observe(stage);
-    const onWheel = (e: WheelEvent) => { e.preventDefault(); target.current = clamp(target.current + e.deltaY * 0.0045); lastInteract.current = performance.now(); };
     let downX = 0, downT = 0;
     const onDown = (e: PointerEvent) => {
       // don't start a coverflow drag when the press begins on the sound button —
@@ -112,7 +113,6 @@ export default function Reels() {
     const onMove = (e: PointerEvent) => { if (!dragging.current) return; const dx = e.clientX - downX; if (Math.abs(dx) > 8) moved.current = true; target.current = clamp(downT - dx / spacing); lastInteract.current = performance.now(); };
     const onUp = () => { dragging.current = false; target.current = clamp(Math.round(target.current)); lastInteract.current = performance.now(); };
     const onResize = () => { W = stage.clientWidth; spacing = Math.min(W * 0.36, 480); };
-    stage.addEventListener('wheel', onWheel, { passive: false });
     stage.addEventListener('pointerdown', onDown);
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
@@ -120,7 +120,6 @@ export default function Reels() {
     return () => {
       cancelAnimationFrame(raf);
       vis.disconnect();
-      stage.removeEventListener('wheel', onWheel);
       stage.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);

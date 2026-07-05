@@ -219,7 +219,7 @@ svg{display:block}
 .exhibition__head{padding:clamp(5rem,11vh,8rem) 0 3rem;text-align:center}
 .exh-pin{height:100svh;display:flex;align-items:center;overflow:hidden}
 .exh-track{display:flex;gap:clamp(1.1rem,2.4vw,1.9rem);padding-inline:6vw;will-change:transform}
-.card{position:relative;flex:none;width:min(78vw,440px);aspect-ratio:3/4;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:#000}
+.card{position:relative;flex:none;width:min(78vw,440px);aspect-ratio:3/4;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:#000;cursor:pointer}
 @media (min-width:680px){.card{width:min(44vw,420px)}}
 @media (min-width:1024px){.card{width:min(27vw,400px)}}
 .card__img{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.16) translate3d(var(--px,0),0,0);will-change:transform}
@@ -239,10 +239,15 @@ svg{display:block}
 .cd s{color:rgba(185,160,106,.45);text-decoration:none;margin-top:-.3rem}
 .cd span{display:flex;flex-direction:column;align-items:center}
 .cd em{font-style:normal;font-size:.46rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:.3rem;font-weight:600}
-.card__cta{margin-top:1.3rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:.9rem;
-  text-transform:uppercase;letter-spacing:.2em;font-size:.62rem;font-weight:650;transition:color .4s}
-.card:hover .card__cta{color:var(--gold-2)}
-.cta-arr{color:var(--gold)}
+.card__cta{margin-top:1.2rem;display:flex;align-items:center;justify-content:center;gap:.6em;
+  background:var(--gold);color:var(--ink);border-radius:3px;padding:.72rem 1rem;
+  text-transform:uppercase;letter-spacing:.16em;font-size:.6rem;font-weight:750;
+  box-shadow:0 0 0 0 rgba(185,160,106,.55);animation:ctapulse 1.9s var(--ease) infinite;transition:transform .3s var(--ease),background-color .3s}
+.card:hover .card__cta{transform:translateY(-1px);background:var(--gold-2)}
+.card__cta .cta-arr{color:var(--ink);transition:transform .4s var(--ease)}
+.card:hover .card__cta .cta-arr{transform:translateX(4px)}
+@keyframes ctapulse{0%{box-shadow:0 0 0 0 rgba(185,160,106,.55)}70%{box-shadow:0 0 0 12px rgba(185,160,106,0)}100%{box-shadow:0 0 0 0 rgba(185,160,106,0)}}
+@media (prefers-reduced-motion:reduce){.card__cta{animation:none}}
 .card--more{display:grid;place-items:center;text-align:center;padding:1.5rem;border-style:solid}
 .card--more p{font-family:var(--font-display);font-weight:700;font-size:1.35rem;margin:.6rem 0}
 .card--more .more-link{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.2rem;color:var(--gold);text-transform:uppercase;letter-spacing:.2em;font-size:.62rem;font-weight:650;border-bottom:1px solid var(--gold);padding-bottom:.35rem}
