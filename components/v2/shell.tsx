@@ -1,5 +1,6 @@
 'use client';
 import { useEffect } from 'react';
+import Lenis from 'lenis';
 
 /**
  * V2 shell — sets the monochrome body, drives the progress hairline, and runs
@@ -10,6 +11,15 @@ export default function Shell() {
   useEffect(() => {
     document.body.classList.add('v2-on');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // smooth scroll (premium feel) — skipped for reduced-motion
+    let lenis: Lenis | null = null;
+    let lenisRaf = 0;
+    if (!reduce) {
+      lenis = new Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+      const loop = (time: number) => { lenis?.raf(time); lenisRaf = requestAnimationFrame(loop); };
+      lenisRaf = requestAnimationFrame(loop);
+    }
 
     // progress hairline + masthead solid-on-scroll
     const bar = document.getElementById('v2-progress');
@@ -54,7 +64,10 @@ export default function Shell() {
     }, { threshold: 0.6 });
     document.querySelectorAll('.v2 [data-count]').forEach((el) => cio.observe(el));
 
-    return () => { cancelAnimationFrame(raf); io.disconnect(); cio.disconnect(); document.body.classList.remove('v2-on'); };
+    return () => {
+      cancelAnimationFrame(raf); cancelAnimationFrame(lenisRaf); lenis?.destroy();
+      io.disconnect(); cio.disconnect(); document.body.classList.remove('v2-on');
+    };
   }, []);
 
   return <div className="v2-progress" id="v2-progress" aria-hidden />;

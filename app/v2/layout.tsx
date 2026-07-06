@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 export default function V2Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="v2">
+      <div className="e2-grain" aria-hidden />
       <Shell />
       <Masthead />
       {children}
