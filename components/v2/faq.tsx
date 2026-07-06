@@ -11,9 +11,9 @@ export default function Faq() {
           <span className="e2-kick" data-slide>Questions</span>
           <h2 className="e2-disp e2-lg" data-slide data-delay="60" style={{ marginTop: '1.2rem' }}>Still not sure?</h2>
         </div>
-        <div className="e2-faq__list">
+        <div className="e2-faq__list" data-fade data-delay="80">
           {faqs.map((f, i) => (
-            <div className={`e2-faq__item${open === i ? ' open' : ''}`} data-fade data-delay={i * 60} key={i}>
+            <div className={`e2-faq__item${open === i ? ' open' : ''}`} key={i}>
               <button className="e2-faq__q" aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>
                 <h3>{f.q}</h3><span className="pm" aria-hidden />
               </button>
