@@ -23,7 +23,7 @@ export default function Nav() {
       <a href="#top" className="nav__brand is-link">Luxe<b>Shots</b></a>
       <div className="nav__links">
         <a href="#collection" className="nav__link">The Dates</a>
-        <a href="#reels" className="nav__link">The Work</a>
+        <a href="/portfolio" className="nav__link">The Work</a>
         <a href="#reviews" className="nav__link">Reviews</a>
       </div>
       <Magnetic strength={0.3}>
