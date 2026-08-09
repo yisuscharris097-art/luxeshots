@@ -8,6 +8,7 @@
  * y lee la config de lib/portfolio-data. V1 y v2 quedan intactos.
  */
 import { useEffect } from 'react';
+import Hls from 'hls.js';
 import {
   HERO_VIDEO, REELS, RESULTS, GRID_PAGE, WA_NUMBER, WA_MSG, BOOKING_URL,
 } from '@/lib/portfolio-data';
@@ -35,6 +36,22 @@ export default function PortfolioPage() {
     const $ = (id: string) => document.getElementById(id) as HTMLElement;
     const pad = (n: number) => String(n).padStart(2, '0');
 
+    /* HLS (Bunny) — hls.js en Chrome/Firefox, nativo en Safari */
+    const hlsList: Hls[] = [];
+    const nativeHls = !!document.createElement('video').canPlayType('application/vnd.apple.mpegurl');
+    function attach(v: HTMLVideoElement | null) {
+      if (!v) return;
+      const src = v.dataset.src;
+      if (!src || v.dataset.on) return;
+      v.dataset.on = '1';
+      if (nativeHls || !src.endsWith('.m3u8')) { v.src = src; }
+      else if (Hls.isSupported()) {
+        const hls = new Hls({ enableWorker: true, capLevelToPlayerSize: true });
+        hls.loadSource(src); hls.attachMedia(v); hlsList.push(hls);
+      } else { v.src = src; }
+    }
+    cleanups.push(() => hlsList.forEach((h) => { try { h.destroy(); } catch { /* noop */ } }));
+
     /* hero video */
     if (HERO_VIDEO) {
       $('heroMedia').innerHTML = `<video autoplay muted loop playsinline src="${HERO_VIDEO}"></video>`;
@@ -44,12 +61,13 @@ export default function PortfolioPage() {
       r.src
         ? `<video muted loop playsinline preload="none" ${r.poster ? `poster="${r.poster}"` : ''} data-src="${r.src}"></video>`
         : `<div class="ph"><span>Reel ${pad(i + 1)}</span></div>`;
+    const botHTML = (r: typeof REELS[number]) => `<div class="bot"><div class="agent">${r.location}</div></div>`;
 
     const lazyIO = new IntersectionObserver((es) => {
       es.forEach((e) => {
         if (e.isIntersecting) {
           const v = e.target as HTMLVideoElement;
-          if (v.dataset.src && !v.src) { v.src = v.dataset.src; v.preload = 'metadata'; }
+          attach(v); v.play().catch(() => {});
           lazyIO.unobserve(v);
         }
       });
@@ -76,16 +94,13 @@ export default function PortfolioPage() {
         ${mediaHTML(r, i)}
         <div class="top"><span class="idx">N° ${pad(i + 1)}</span><span class="price">${r.price}</span></div>
         <div class="play"><i>PLAY</i></div>
-        <div class="bot">
-          <div class="agent">${r.agent}</div>
-          <div class="loc">${r.location}</div>
-        </div>
+        ${botHTML(r)}
         <span class="gold-edge"></span>`;
       gridEl.appendChild(c);
       const v = c.querySelector('video') as HTMLVideoElement | null;
       if (v) {
         lazyIO.observe(v);
-        c.addEventListener('mouseenter', () => { if (v.dataset.src && !v.src) { v.src = v.dataset.src; } v.play().catch(() => {}); });
+        c.addEventListener('mouseenter', () => { attach(v); v.play().catch(() => {}); });
         c.addEventListener('mouseleave', () => { if (v.muted) v.pause(); });
       }
       c.addEventListener('click', () => openLB(i));
@@ -106,7 +121,7 @@ export default function PortfolioPage() {
     const lb = $('lb'); const lbStage = $('lbStage'); let lbIdx = 0;
     const lbMedia = (r: typeof REELS[number], i: number) =>
       r.src
-        ? `<video controls autoplay playsinline ${r.poster ? `poster="${r.poster}"` : ''} src="${r.src}"></video>`
+        ? `<video controls autoplay playsinline ${r.poster ? `poster="${r.poster}"` : ''} data-src="${r.src}"></video>`
         : `<div class="ph"><span>Reel ${pad(i + 1)}</span></div>`;
     function openLB(i: number) {
       lbIdx = i; renderLB();
@@ -120,16 +135,11 @@ export default function PortfolioPage() {
         <span class="lb-idx">N° ${pad(lbIdx + 1)}</span>
         ${lbMedia(r, lbIdx)}
         <span class="edge"></span>
-        <div class="lb-meta"><span class="a">${r.agent}</span><span class="p">${r.price} — ${r.location}</span></div>
+        <div class="lb-meta"><span class="a">${r.location}</span><span class="p">${r.price}</span></div>
         <div class="lb-actions">
           <button class="lb-book book-open">Reserve Your Content Day</button>
         </div>`;
-      const next = REELS[(lbIdx + 1) % REELS.length];
-      if (next.src && !document.querySelector(`link[data-preload="${next.src}"]`)) {
-        const l = document.createElement('link');
-        l.rel = 'preload'; l.as = 'video'; l.href = next.src; l.dataset.preload = next.src;
-        document.head.appendChild(l);
-      }
+      attach(lbStage.querySelector('video')); // HLS con sonido (gesto de click permite autoplay)
     }
     function closeLB() {
       lb.classList.remove('open');
@@ -201,8 +211,8 @@ export default function PortfolioPage() {
         </div>
         <div class="case-info">
           <span class="kick">Case ${pad(ci + 1)} — Content Day</span>
-          <h3>${r.agent}</h3>
-          <div class="where">Filmed inside a <b>${r.price}</b> listing · ${r.location}</div>
+          <h3>${r.location}</h3>
+          <div class="where">Filmed inside a <b>${r.price}</b> listing</div>
           <div class="case-metrics">
             ${cs.metrics.map((m) => `<div class="metric"><div class="mv" data-mv="${m.v}">0</div><div class="ml">${m.l}</div></div>`).join('')}
           </div>
@@ -213,7 +223,7 @@ export default function PortfolioPage() {
       const frame = el.querySelector('.case-frame') as HTMLElement;
       if (v) {
         lazyIO.observe(v);
-        frame.addEventListener('mouseenter', () => { if (v.dataset.src && !v.src) { v.src = v.dataset.src; } v.play().catch(() => {}); });
+        frame.addEventListener('mouseenter', () => { attach(v); v.play().catch(() => {}); });
         frame.addEventListener('mouseleave', () => { if (v.muted) v.pause(); });
       }
       frame.addEventListener('click', () => openLB(cs.reel));
