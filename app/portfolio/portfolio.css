@@ -64,6 +64,19 @@ body:has(.pf){cursor:auto}
   radial-gradient(80% 70% at 10% 95%,rgba(185,160,106,.1),transparent 60%),
   linear-gradient(180deg,#12100d,#0B0B0C 75%)}
 .pf .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.4),transparent 40%,rgba(11,11,12,.95))}
+/* móvil con video de fondo: arriba se aprecia el video, abajo se oscurece tras el texto */
+@media (max-width:900px){
+  .pf .hero-media video{filter:brightness(.66)}
+  .pf .hero::after{background:linear-gradient(180deg,
+    rgba(11,11,12,.14) 0%,
+    rgba(11,11,12,0) 22%,
+    rgba(11,11,12,.5) 48%,
+    rgba(11,11,12,.9) 74%,
+    rgba(11,11,12,.97) 100%)}
+  .pf .hero h1{text-shadow:0 2px 26px rgba(0,0,0,.55)}
+  .pf .hero .eyebrow{text-shadow:0 1px 14px rgba(0,0,0,.6)}
+  .pf .hero-sub p{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+}
 .pf .hero-inner{position:relative;z-index:2;padding:0 clamp(20px,4vw,48px)}
 .pf .hero .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;
   opacity:0;animation:pfFadeUp 1s .4s ease forwards}
