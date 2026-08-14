@@ -335,7 +335,7 @@ export default function PortfolioPage() {
       <header>
         <a className="logo" href="#top">Luxe<b>Shots</b></a>
         <div className="hdr-right">
-          <span className="kicker">The Work — Content Days</span>
+          <span className="kicker">LuxeShots — The Portfolio</span>
           <button className="hdr-cta book-open">Book Yours</button>
         </div>
       </header>
@@ -344,7 +344,7 @@ export default function PortfolioPage() {
       <section className="hero" id="topHero">
         <div className="hero-media" id="heroMedia"><div className="ph"></div></div>
         <div className="hero-inner">
-          <div className="eyebrow">LuxeShots — Content Days</div>
+          <div className="eyebrow">LuxeShots — The Portfolio</div>
           <h1>Shot where <em>luxury</em> lives.</h1>
           <div className="hero-sub">
             <p>The complete work of LuxeShots Content Days — every reel filmed inside a multimillion-dollar listing across South Florida.</p>
@@ -366,7 +366,7 @@ export default function PortfolioPage() {
         <div className="sec-head rv">
           <div>
             <div className="eyebrow">The Collection</div>
-            <h2>Every frame,<br /><em>every listing.</em></h2>
+            <h2>Every Frame,<br /><em>Every Listing.</em></h2>
           </div>
           <p className="side">Hover to preview. Tap any reel to watch it full screen — each one shot inside a real multimillion-dollar home.</p>
         </div>
