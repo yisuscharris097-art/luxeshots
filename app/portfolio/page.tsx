@@ -10,7 +10,7 @@
 import { useEffect } from 'react';
 import Hls from 'hls.js';
 import {
-  HERO_VIDEO, REELS, RESULTS, GRID_PAGE, BOOKING_URL,
+  HERO_VIDEO, REELS, GRID_PAGE, BOOKING_URL,
 } from '@/lib/portfolio-data';
 import './portfolio.css';
 
@@ -197,61 +197,6 @@ export default function PortfolioPage() {
       cleanups.push(() => { el.removeEventListener('pointermove', mv as EventListener); el.removeEventListener('pointerleave', lv); });
     });
 
-    /* ---------- THE RESULTS ---------- */
-    const casesEl = $('cases'); casesEl.innerHTML = '';
-    RESULTS.forEach((cs, ci) => {
-      const r = REELS[cs.reel];
-      const el = document.createElement('div');
-      el.className = 'case rv' + (ci % 2 ? ' flip' : '');
-      el.innerHTML = `
-        <div class="case-frame" data-reel="${cs.reel}">
-          ${mediaHTML(r, cs.reel)}
-          <div class="cf-play"><i>PLAY</i></div>
-          <span class="edge"></span>
-        </div>
-        <div class="case-info">
-          <span class="kick">Case ${pad(ci + 1)} — Content Day</span>
-          <h3>${r.location}</h3>
-          <div class="where">Filmed inside a <b>${r.price}</b> listing</div>
-          <div class="case-metrics">
-            ${cs.metrics.map((m) => `<div class="metric"><div class="mv" data-mv="${m.v}">0</div><div class="ml">${m.l}</div></div>`).join('')}
-          </div>
-        </div>`;
-      casesEl.appendChild(el);
-      io.observe(el);
-      const v = el.querySelector('video') as HTMLVideoElement | null;
-      const frame = el.querySelector('.case-frame') as HTMLElement;
-      if (v) {
-        lazyIO.observe(v);
-        frame.addEventListener('mouseenter', () => { attach(v); v.play().catch(() => {}); });
-        frame.addEventListener('mouseleave', () => { if (v.muted) v.pause(); });
-      }
-      frame.addEventListener('click', () => openLB(cs.reel));
-    });
-
-    /* metric count-up: soporta 2.4M, +1,800, 890K, 3x, 14 */
-    function animateMetric(el: HTMLElement) {
-      const raw = el.dataset.mv!;
-      const m = raw.match(/^([^0-9]*)([\d.,]+)(.*)$/);
-      if (!m) { el.textContent = raw; return; }
-      const prefix = m[1]; const suffix = m[3];
-      const num = parseFloat(m[2].replace(/,/g, ''));
-      const decimals = (m[2].split('.')[1] || '').length;
-      const hasComma = m[2].includes(',');
-      const dur = 1500; const t0 = performance.now();
-      const fmt = (n: number) => { let s = n.toFixed(decimals); if (hasComma) s = Number(s).toLocaleString('en-US'); return s; };
-      function tick(t: number) {
-        const p = Math.min(1, (t - t0) / dur); const e = 1 - Math.pow(1 - p, 3);
-        el.textContent = prefix + fmt(num * e) + suffix;
-        if (p < 1) requestAnimationFrame(tick); else el.textContent = raw;
-      }
-      requestAnimationFrame(tick);
-    }
-    const metricIO = new IntersectionObserver((es) => {
-      es.forEach((e) => { if (e.isIntersecting) { animateMetric(e.target as HTMLElement); metricIO.unobserve(e.target); } });
-    }, { threshold: 0.6 });
-    cleanups.push(() => metricIO.disconnect());
-    document.querySelectorAll('.pf .metric .mv').forEach((el) => metricIO.observe(el));
 
     /* ---------- BOOKING DRAWER ---------- */
     const bk = $('bk'); const bkOv = $('bkOv'); const bkFrame = $('bkFrame') as HTMLIFrameElement; let bkLoaded = false;
@@ -291,7 +236,7 @@ export default function PortfolioPage() {
       cleanups.forEach((c) => c());
       document.body.style.overflow = '';
       document.body.style.cursor = prevCursor;
-      gridEl.innerHTML = ''; casesEl.innerHTML = ''; lbStage.innerHTML = '';
+      gridEl.innerHTML = ''; lbStage.innerHTML = '';
     };
   }, []);
 
@@ -367,33 +312,6 @@ export default function PortfolioPage() {
           <button className="loadmore" id="lmBtn">Load More Reels</button>
           <span className="loadmore-count"><b id="lmShown">0</b> / <span id="lmTotal">0</span></span>
         </div>
-      </section>
-
-      <div className="marquee" aria-hidden="true"><MarqueeTrack /></div>
-
-      {/* THE RESULTS */}
-      <section className="shell res" id="results">
-        <div className="sec-head rv">
-          <div>
-            <div className="eyebrow">The Results</div>
-            <h2>Content That<br /><em>Produces.</em></h2>
-          </div>
-          <p className="side">Real agents, real numbers. What a single Content Day did for their brand.</p>
-        </div>
-        <div id="cases"></div>
-      </section>
-
-      <section className="statement">
-        <p>One chance at a first impression. Make it <em>unforgettable.</em></p>
-      </section>
-
-      {/* CTA */}
-      <section className="cta">
-        <div className="eyebrow">Spots Are Limited</div>
-        <h2>Want Content Like <em>This?</em></h2>
-        <p>Reserve your free Luxe Content Day inside a multimillion-dollar listing — and walk away with a viral reel and a scroll-stopping headshot.</p>
-        <button className="btn book-open">Reserve Your Content Day</button>
-        <div className="sub">$1,500 Value — Free · By Invitation Only</div>
       </section>
 
       <footer>
