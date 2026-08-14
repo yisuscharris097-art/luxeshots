@@ -337,7 +337,7 @@ export default function PortfolioPage() {
         <div className="hero-media" id="heroMedia"><div className="ph"></div></div>
         <div className="hero-inner">
           <div className="eyebrow">LuxeShots — The Portfolio</div>
-          <h1>Shot where <em>luxury</em> lives.</h1>
+          <h1>Shot Where <em>Luxury</em> Lives.</h1>
           <div className="hero-sub">
             <p>The complete work of LuxeShots Content Days — every reel filmed inside a multimillion-dollar listing across South Florida.</p>
             <div className="scrollcue"><span>See the work</span><i></i></div>
@@ -376,7 +376,7 @@ export default function PortfolioPage() {
         <div className="sec-head rv">
           <div>
             <div className="eyebrow">The Results</div>
-            <h2>Content that<br /><em>produces.</em></h2>
+            <h2>Content That<br /><em>Produces.</em></h2>
           </div>
           <p className="side">Real agents, real numbers. What a single Content Day did for their brand.</p>
         </div>
@@ -390,7 +390,7 @@ export default function PortfolioPage() {
       {/* CTA */}
       <section className="cta">
         <div className="eyebrow">Spots Are Limited</div>
-        <h2>Want Content like <em>this?</em></h2>
+        <h2>Want Content Like <em>This?</em></h2>
         <p>Reserve your free Luxe Content Day inside a multimillion-dollar listing — and walk away with a viral reel and a scroll-stopping headshot.</p>
         <button className="btn book-open">Reserve Your Content Day</button>
         <div className="sub">$1,500 Value — Free · By Invitation Only</div>
