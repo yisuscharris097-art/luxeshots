@@ -21,8 +21,9 @@ export type ResultCase = {
   metrics: { v: string; l: string }[];
 };
 
-/** Video de fondo del hero — solo se usa en móvil (clip vertical). HLS de Bunny. */
-export const HERO_VIDEO = 'https://vz-5c81264f-e6c.b-cdn.net/8d38a86a-1140-405d-a0aa-baa8b4f274e8/playlist.m3u8';
+/** Video de fondo del hero — solo se usa en móvil (clip vertical). HLS de Bunny.
+ *  Vacío = sin video, se muestra el gradiente placeholder. */
+export const HERO_VIDEO = '';
 
 export const REELS: Reel[] = [
   { ...bunny('52f27bf9-169d-438a-a18d-99bec2fbc37c'), price: '$6.9M', location: 'Singer Island' },
