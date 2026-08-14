@@ -52,9 +52,15 @@ export default function PortfolioPage() {
     }
     cleanups.push(() => hlsList.forEach((h) => { try { h.destroy(); } catch { /* noop */ } }));
 
-    /* hero video */
-    if (HERO_VIDEO) {
-      $('heroMedia').innerHTML = `<video autoplay muted loop playsinline src="${HERO_VIDEO}"></video>`;
+    /* hero video — solo móvil (el clip es vertical; en desktop se recortaría) */
+    if (HERO_VIDEO && window.matchMedia('(max-width: 900px)').matches) {
+      const hv = document.createElement('video');
+      hv.muted = true; hv.loop = true; hv.playsInline = true; hv.autoplay = true; hv.preload = 'metadata';
+      hv.poster = HERO_VIDEO.replace('playlist.m3u8', 'thumbnail.jpg');
+      hv.dataset.src = HERO_VIDEO;
+      $('heroMedia').innerHTML = '';
+      $('heroMedia').appendChild(hv);
+      attach(hv); hv.play().catch(() => {});
     }
 
     const mediaHTML = (r: typeof REELS[number], i: number) =>
