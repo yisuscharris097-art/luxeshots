@@ -23,7 +23,7 @@ export type ResultCase = {
 
 /** Video de fondo del hero — solo se usa en móvil (clip vertical). HLS de Bunny.
  *  Vacío = sin video, se muestra el gradiente placeholder. */
-export const HERO_VIDEO = '';
+export const HERO_VIDEO: string = '';
 
 export const REELS: Reel[] = [
   { ...bunny('433757ff-3b2b-4c89-bee9-c09eca53a1ec'), price: '$6.9M', location: 'Singer Island' },
