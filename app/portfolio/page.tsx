@@ -10,7 +10,7 @@
 import { useEffect } from 'react';
 import Hls from 'hls.js';
 import {
-  HERO_VIDEO, REELS, GRID_PAGE, BOOKING_URL,
+  HERO_VIDEO, REELS, GRID_PAGE,
 } from '@/lib/portfolio-data';
 import './portfolio.css';
 
@@ -135,10 +135,7 @@ export default function PortfolioPage() {
         <span class="lb-idx">N° ${pad(lbIdx + 1)}</span>
         ${lbMedia(r, lbIdx)}
         <span class="edge"></span>
-        <div class="lb-meta"><span class="a">${r.location}</span><span class="p">${r.price}</span></div>
-        <div class="lb-actions">
-          <button class="lb-book book-open">Reserve Your Content Day</button>
-        </div>`;
+        <div class="lb-meta"><span class="a">${r.location}</span><span class="p">${r.price}</span></div>`;
       attach(lbStage.querySelector('video')); // HLS con sonido (gesto de click permite autoplay)
     }
     function closeLB() {
@@ -198,32 +195,6 @@ export default function PortfolioPage() {
     });
 
 
-    /* ---------- BOOKING DRAWER ---------- */
-    const bk = $('bk'); const bkOv = $('bkOv'); const bkFrame = $('bkFrame') as HTMLIFrameElement; let bkLoaded = false;
-    function openBK() {
-      if (!bkLoaded) {
-        bkFrame.src = BOOKING_URL;
-        bkFrame.addEventListener('load', () => $('bkLoading').classList.add('off'), { once: true });
-        bkLoaded = true;
-      }
-      bk.classList.add('open'); bkOv.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      document.querySelectorAll('.pf video').forEach((v) => { const vid = v as HTMLVideoElement; if (!vid.muted) vid.muted = true; });
-    }
-    function closeBK() {
-      bk.classList.remove('open'); bkOv.classList.remove('open');
-      if (!lb.classList.contains('open')) document.body.style.overflow = '';
-    }
-    on($('bkClose'), 'click', closeBK);
-    on(bkOv, 'click', closeBK);
-    on(document, 'click', ((e: MouseEvent) => {
-      const t = (e.target as HTMLElement).closest('.book-open');
-      if (t) { e.preventDefault(); openBK(); }
-    }) as EventListener);
-    on(window, 'keydown', ((e: KeyboardEvent) => {
-      if (e.key === 'Escape' && bk.classList.contains('open')) closeBK();
-    }) as EventListener);
-
     /* ---------- PRELOADER ---------- */
     const loaderT = setTimeout(() => $('loader').classList.add('done'), 1400);
     cleanups.push(() => clearTimeout(loaderT));
@@ -250,18 +221,6 @@ export default function PortfolioPage() {
         <div className="bar"><i></i></div>
       </div>
       <div className="scrollbar"><i id="sbar"></i></div>
-
-      <div className="bk-ov" id="bkOv"></div>
-      <aside className="bk" id="bk" aria-label="Booking">
-        <div className="bk-head">
-          <span className="t">Reserve Your <b>Content Day</b></span>
-          <button className="bk-close" id="bkClose" aria-label="Close booking">✕</button>
-        </div>
-        <div className="bk-body">
-          <div className="bk-loading" id="bkLoading">Loading Calendar</div>
-          <iframe id="bkFrame" title="LuxeShots Booking" loading="lazy"></iframe>
-        </div>
-      </aside>
 
       <div className="lb" id="lb" aria-modal="true" role="dialog">
         <button className="lb-close" id="lbClose" aria-label="Close">✕</button>
