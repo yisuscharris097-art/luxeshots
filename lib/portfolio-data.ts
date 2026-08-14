@@ -26,18 +26,18 @@ export type ResultCase = {
 export const HERO_VIDEO = '';
 
 export const REELS: Reel[] = [
-  { ...bunny('52f27bf9-169d-438a-a18d-99bec2fbc37c'), price: '$6.9M', location: 'Singer Island' },
-  { ...bunny('108c8d71-da1c-4253-b7ad-a64dde4d9193'), price: '$5.69M', location: 'Lighthouse Point' },
-  { ...bunny('e0fc361a-32bf-404b-8a4b-7134be1cc495'), price: '$3.9M', location: 'Delray Beach' },
-  { ...bunny('9d7d24e4-dba4-47b8-99d6-1571a417677c'), price: '$7M', location: 'Juno Beach' },
-  { ...bunny('8be793e8-6ccb-4f08-8216-1bd86d83013a'), price: '$5.12M', location: 'Delray Beach' },
-  { ...bunny('25928f12-a5a3-457b-8e92-038b1ef67f32'), price: '$5.5M', location: 'Plantation' },
-  { ...bunny('cd605446-d2af-49bc-aa46-64234d9757fb'), price: '$3.9M', location: 'Palm Beach Gardens' },
-  { ...bunny('7c33b387-6d96-4f4c-9b6c-ab3b0c240577'), price: '$6.2M', location: 'Fort Lauderdale' },
-  { ...bunny('77742255-abaf-4b27-9ade-84e1edf2b47b'), price: '$4.8M', location: 'Boca Raton' },
-  { ...bunny('ace6edf2-f871-4f2e-9c4e-65b416675876'), price: '$8.4M', location: 'Manalapan' },
-  { ...bunny('d6a9410a-708e-41f8-8fd9-625bccc29609'), price: '$5.95M', location: 'Jupiter' },
-  { ...bunny('b99f25c3-dcf0-4cc9-9273-64e44d7d7fb2'), price: '$4.5M', location: 'Highland Beach' },
+  { ...bunny('433757ff-3b2b-4c89-bee9-c09eca53a1ec'), price: '$6.9M', location: 'Singer Island' },
+  { ...bunny('f6cc6bc5-ad0d-48d1-92a7-fc7e321dc68a'), price: '$5.69M', location: 'Lighthouse Point' },
+  { ...bunny('d4ca987c-d4dd-42ab-b7dc-0644b592c253'), price: '$3.9M', location: 'Delray Beach' },
+  { ...bunny('55d8902d-be63-4352-8f4d-633117c7dd83'), price: '$7M', location: 'Juno Beach' },
+  { ...bunny('dd275487-0d04-47e8-b2f4-e7eed5eeb11a'), price: '$5.12M', location: 'Delray Beach' },
+  { ...bunny('a61cce6b-6969-46fb-b695-14952002ad58'), price: '$5.5M', location: 'Plantation' },
+  { ...bunny('7021aa35-d776-428e-a785-d2f23e7e7ff6'), price: '$3.9M', location: 'Palm Beach Gardens' },
+  { ...bunny('522f826c-86e4-4349-95fb-2f385cc285bd'), price: '$6.2M', location: 'Fort Lauderdale' },
+  { ...bunny('107abb90-68a6-4b66-b00a-c7cfa788594a'), price: '$4.8M', location: 'Boca Raton' },
+  { ...bunny('f5a91cc1-8ace-4465-acd2-dd6f40a7c93f'), price: '$8.4M', location: 'Manalapan' },
+  { ...bunny('2acbd4d5-0735-40f5-949c-ffa4c0e2666f'), price: '$5.95M', location: 'Jupiter' },
+  { ...bunny('5bae27f0-49ad-4f01-a84b-24f59a57e815'), price: '$4.5M', location: 'Highland Beach' },
 ];
 
 export const RESULTS: ResultCase[] = [
