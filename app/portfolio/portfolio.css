@@ -68,7 +68,7 @@ body:has(.pf){cursor:auto}
 .pf .hero .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;
   opacity:0;animation:pfFadeUp 1s .4s ease forwards}
 .pf .hero .eyebrow::before{content:"";width:38px;height:1px;background:var(--gold)}
-.pf .hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(33px,5.6vw,74px);line-height:1.03;letter-spacing:-.02em;max-width:16ch;text-wrap:balance;
+.pf .hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(33px,5.6vw,74px);line-height:1.03;letter-spacing:-.02em;max-width:16ch;margin-inline:0;text-wrap:balance;
   opacity:0;animation:pfFadeUp 1.1s .55s ease forwards}
 .pf .hero h1 em{font-style:normal;color:var(--gold)}
 .pf .hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:26px;flex-wrap:wrap;
