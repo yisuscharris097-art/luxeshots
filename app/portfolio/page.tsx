@@ -247,16 +247,16 @@ export default function PortfolioPage() {
         <div className="hero-media" id="heroMedia"><div className="ph"></div></div>
         <div className="hero-inner">
           <div className="eyebrow">LuxeShots — The Portfolio</div>
-          <h1>Shot Where <em>Luxury</em> Lives.</h1>
+          <h1>If a Picture Says <em>1,000 Words</em>… What&rsquo;s Your Content Saying About You?</h1>
           <div className="hero-sub">
             <p>The complete work of LuxeShots Content Days — every reel filmed inside a multimillion-dollar listing across South Florida.</p>
             <div className="scrollcue"><span>See the work</span><i></i></div>
           </div>
         </div>
         <div className="stats">
-          <div className="stat"><div className="n" data-value="40" data-prefix="$" data-suffix="M+"><b>$0M+</b></div><div className="l">In Listings Filmed</div></div>
+          <div className="stat"><div className="n" data-value="400" data-prefix="$" data-suffix="M+"><b>$0M+</b></div><div className="l">In Listings Filmed</div></div>
           <div className="stat"><div className="n" data-value="100" data-suffix="%"><b>0%</b></div><div className="l">Five-Star Reviews</div></div>
-          <div className="stat"><div className="n" data-value="1" data-suffix="M+"><b>0M+</b></div><div className="l">Views Generated</div></div>
+          <div className="stat"><div className="n" data-value="17" data-suffix="M+"><b>0M+</b></div><div className="l">Views Generated</div></div>
         </div>
       </section>
 
