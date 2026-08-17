@@ -21,9 +21,10 @@ export type ResultCase = {
   metrics: { v: string; l: string }[];
 };
 
-/** Video de fondo del hero — solo se usa en móvil (clip vertical). HLS de Bunny.
- *  Vacío = sin video, se muestra el gradiente placeholder. */
-export const HERO_VIDEO: string = '';
+/** Video de fondo del hero. HLS de Bunny. Vacío = gradiente placeholder.
+ *  HERO_VIDEO = clip horizontal (desktop) · HERO_VIDEO_MOBILE = clip vertical (móvil). */
+export const HERO_VIDEO: string = 'https://vz-5c81264f-e6c.b-cdn.net/ab6066bd-f97c-457d-815f-329a2b8ccb3b/playlist.m3u8';
+export const HERO_VIDEO_MOBILE: string = 'https://vz-5c81264f-e6c.b-cdn.net/ba10704c-6539-442a-b2a6-6d5f91c2449a/playlist.m3u8';
 
 export const REELS: Reel[] = [
   { ...bunny('7021aa35-d776-428e-a785-d2f23e7e7ff6'), price: '$3.9M', location: 'Palm Beach Gardens' },

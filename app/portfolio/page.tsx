@@ -10,7 +10,7 @@
 import { useEffect } from 'react';
 import Hls from 'hls.js';
 import {
-  HERO_VIDEO, REELS, GRID_PAGE,
+  HERO_VIDEO, HERO_VIDEO_MOBILE, REELS, GRID_PAGE,
 } from '@/lib/portfolio-data';
 import './portfolio.css';
 
@@ -52,12 +52,15 @@ export default function PortfolioPage() {
     }
     cleanups.push(() => hlsList.forEach((h) => { try { h.destroy(); } catch { /* noop */ } }));
 
-    /* hero video — solo móvil (el clip es vertical; en desktop se recortaría) */
-    if (HERO_VIDEO && window.matchMedia('(max-width: 900px)').matches) {
+    /* hero video de fondo — horizontal en desktop, vertical en móvil */
+    const heroSrc = window.matchMedia('(max-width: 900px)').matches
+      ? (HERO_VIDEO_MOBILE || HERO_VIDEO)
+      : (HERO_VIDEO || HERO_VIDEO_MOBILE);
+    if (heroSrc) {
       const hv = document.createElement('video');
       hv.muted = true; hv.loop = true; hv.playsInline = true; hv.autoplay = true; hv.preload = 'metadata';
-      hv.poster = HERO_VIDEO.replace('playlist.m3u8', 'thumbnail.jpg');
-      hv.dataset.src = HERO_VIDEO;
+      hv.poster = heroSrc.replace('playlist.m3u8', 'thumbnail.jpg');
+      hv.dataset.src = heroSrc;
       $('heroMedia').innerHTML = '';
       $('heroMedia').appendChild(hv);
       attach(hv); hv.play().catch(() => {});
@@ -243,11 +246,10 @@ export default function PortfolioPage() {
       </header>
 
       {/* HERO */}
-      <section className="hero" id="topHero">
+      <section className="hero hero--video" id="topHero">
         <div className="hero-media" id="heroMedia"><div className="ph"></div></div>
         <div className="hero-inner">
           <div className="eyebrow">LuxeShots — The Portfolio</div>
-          <h1>If a Picture Says <em>1,000 Words</em>… What&rsquo;s Your Content Saying About You?</h1>
           <div className="hero-sub">
             <p>The complete work of LuxeShots Content Days — every reel filmed inside a multimillion-dollar listing across South Florida.</p>
             <div className="scrollcue"><span>See the work</span><i></i></div>
@@ -268,7 +270,7 @@ export default function PortfolioPage() {
         <div className="sec-head rv">
           <div>
             <div className="eyebrow">The Collection</div>
-            <h2>Every Frame,<br /><em>Every Listing.</em></h2>
+            <h2 className="h2-statement">If a Picture Says <em>1,000 Words</em>… What&rsquo;s Your Content Saying About You?</h2>
           </div>
           <p className="side">Hover to preview. Tap any reel to watch it full screen — each one shot inside a real multimillion-dollar home.</p>
         </div>

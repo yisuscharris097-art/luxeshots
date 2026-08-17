@@ -53,17 +53,28 @@ body:has(.pf){cursor:auto}
 .pf .sec-head .eyebrow::before{content:"";width:38px;height:1px;background:var(--gold)}
 .pf .sec-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(40px,6vw,84px);line-height:.98;letter-spacing:-.01em}
 .pf .sec-head h2 em{font-style:normal;color:var(--gold)}
+/* titular-statement (largo) que bajó del hero: columna contenida y equilibrada */
+.pf .sec-head h2.h2-statement{font-size:clamp(30px,4.3vw,58px);line-height:1.05;max-width:17ch;margin-inline:0;text-wrap:balance}
 .pf .sec-head .side{max-width:320px;color:var(--dim);font-size:13.5px;padding-bottom:8px}
 
 /* ======================= HERO ======================= */
 .pf .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
 .pf .hero-media{position:absolute;inset:0}
-.pf .hero-media video{width:100%;height:100%;object-fit:cover;filter:brightness(.5)}
+.pf .hero-media video{width:100%;height:100%;object-fit:cover;filter:brightness(.72)}
 .pf .hero-media .ph{width:100%;height:100%;background:
   radial-gradient(120% 90% at 75% 5%,rgba(185,160,106,.2),transparent 55%),
   radial-gradient(80% 70% at 10% 95%,rgba(185,160,106,.1),transparent 60%),
   linear-gradient(180deg,#12100d,#0B0B0C 75%)}
 .pf .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.4),transparent 40%,rgba(11,11,12,.95))}
+/* hero de video: centro libre para el video, oscuro solo arriba (nav) y abajo (texto+stats) */
+.pf .hero--video::after{background:linear-gradient(180deg,
+  rgba(11,11,12,.5) 0%,
+  rgba(11,11,12,0) 24%,
+  rgba(11,11,12,0) 44%,
+  rgba(11,11,12,.7) 72%,
+  rgba(11,11,12,.97) 100%)}
+.pf .hero--video .eyebrow{text-shadow:0 1px 14px rgba(0,0,0,.6)}
+.pf .hero--video .hero-sub p{text-shadow:0 1px 14px rgba(0,0,0,.55)}
 .pf .hero-inner{position:relative;z-index:2;padding:0 clamp(20px,4vw,48px)}
 .pf .hero .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;
   opacity:0;animation:pfFadeUp 1s .4s ease forwards}
