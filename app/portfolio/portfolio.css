@@ -75,6 +75,17 @@ body:has(.pf){cursor:auto}
   rgba(11,11,12,.97) 100%)}
 .pf .hero--video .eyebrow{text-shadow:0 1px 14px rgba(0,0,0,.6)}
 .pf .hero--video .hero-sub p{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+/* móvil: el clip es 3:4 → mostrar el frame COMPLETO (sin recorte), texto debajo */
+@media (max-width:900px){
+  .pf .hero--video{min-height:0;display:block;overflow:visible}
+  .pf .hero--video .hero-media{position:relative;width:100%;aspect-ratio:3/4}
+  .pf .hero--video .hero-media video{filter:brightness(.92)}          /* casi limpio: ya no hay texto encima */
+  .pf .hero--video::after{content:none}                               /* sin scrim de pantalla completa */
+  .pf .hero--video .hero-media::after{content:"";position:absolute;inset:auto 0 0 0;height:32%;
+    background:linear-gradient(180deg,transparent,#0B0B0C);pointer-events:none}  /* fade suave al fondo */
+  .pf .hero--video .hero-inner{padding-top:24px}
+  .pf .hero--video .eyebrow,.pf .hero--video .hero-sub p{text-shadow:none}
+}
 .pf .hero-inner{position:relative;z-index:2;padding:0 clamp(20px,4vw,48px)}
 .pf .hero .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;
   opacity:0;animation:pfFadeUp 1s .4s ease forwards}
