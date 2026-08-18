@@ -377,3 +377,92 @@ body:has(.pf){cursor:auto}
   .pf .metric .mv{font-size:clamp(24px,7.4vw,40px)}
   .pf .metric .ml{font-size:8.5px;letter-spacing:.14em;max-width:none;margin-top:6px}
 }
+
+/* ============================================================
+   THE SIGNATURE REEL — pitch + testimonials en video
+============================================================ */
+.pf .sigreel{background:#000;overflow:hidden}
+.pf .sigreel em{font-style:italic;color:var(--gold)}
+.pf .sigreel .eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:26px}
+.pf .sigreel .eyebrow::before,.pf .sigreel .eyebrow::after{content:"";width:38px;height:1px;background:var(--gold);opacity:.7}
+
+/* 1 · apertura cinematográfica */
+.pf .sig-open{max-width:920px;margin:0 auto;text-align:center}
+.pf .sig-head{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5.2vw,72px);line-height:1.06;
+  letter-spacing:-.02em;max-width:16ch;margin:0 auto;text-wrap:balance}
+.pf .sig-body{max-width:600px;margin:clamp(28px,4vh,44px) auto 0;display:flex;flex-direction:column;gap:18px}
+.pf .sig-body p{color:rgba(236,231,221,.66);font-size:clamp(14px,1.15vw,16px);line-height:1.7}
+
+/* 2 · showcase del reel protagonista */
+.pf .sig-showcase{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(24px,4vw,64px);
+  margin-top:clamp(60px,9vh,110px)}
+.pf .sig-flank{display:flex;flex-direction:column;gap:clamp(30px,6vh,60px)}
+.pf .sig-flank--l{align-items:flex-end;text-align:right}
+.pf .sig-flank--r{align-items:flex-start;text-align:left}
+.pf .sig-stat .n{font-family:var(--serif);font-weight:300;font-size:clamp(40px,4.4vw,74px);line-height:.95;color:var(--ivory)}
+.pf .sig-stat .n b{font-weight:300;color:var(--ivory)}
+.pf .sig-stat .l{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-top:10px}
+.pf .sig-equation{font-family:var(--serif);font-size:clamp(13px,1.15vw,15.5px);color:var(--dim);line-height:1.6;max-width:24ch}
+
+.pf .sig-player{position:relative;width:min(300px,66vw);aspect-ratio:9/16;border-radius:14px;overflow:hidden;
+  background:var(--ink2);box-shadow:0 30px 90px -30px rgba(0,0,0,.9),0 0 0 1px var(--line);cursor:pointer;justify-self:center}
+.pf .sig-player video,.pf .sig-player .ph{width:100%;height:100%;object-fit:cover}
+.pf .sig-player .ph,.pf .tvid .ph{display:grid;place-items:center;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(185,160,106,.14),transparent 60%),linear-gradient(180deg,#161310,#0b0a09)}
+.pf .sig-player .ph span,.pf .tvid .ph span{font-family:var(--serif);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+
+/* botón play (sig + testimonials) */
+.pf .tplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;
+  border:1px solid rgba(236,231,221,.6);display:grid;place-items:center;transition:.35s;pointer-events:none;z-index:2;
+  background:rgba(11,11,12,.28);backdrop-filter:blur(2px)}
+.pf .tplay i{width:0;height:0;border-style:solid;border-width:9px 0 9px 15px;
+  border-color:transparent transparent transparent var(--ivory);margin-left:3px}
+.pf .sig-player:hover .tplay,.pf .tcard:hover .tplay{background:var(--gold);border-color:var(--gold);transform:translate(-50%,-50%) scale(1.06)}
+.pf .sig-player:hover .tplay i,.pf .tcard:hover .tplay i{border-left-color:var(--ink)}
+.pf .playing .tplay{opacity:0}
+
+/* 3 · exposición compuesta */
+.pf .sig-compound{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:.15em .1em;
+  margin-top:clamp(64px,10vh,120px);text-align:center;
+  font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.6vw,38px);letter-spacing:-.01em}
+.pf .sig-compound .cw{color:var(--ivory)}
+.pf .sig-compound .cw:not(:last-child)::after{content:"→";color:var(--gold);margin:0 .45em;font-weight:400}
+
+/* 4 · testimonials */
+.pf .sig-subhead{text-align:center;margin-top:clamp(80px,12vh,150px);margin-bottom:clamp(34px,5vh,56px)}
+.pf .sig-subhead h3{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.6vw,50px);line-height:1.08;letter-spacing:-.01em}
+.pf .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px)}
+.pf .tcard{position:relative;transition:transform .4s cubic-bezier(.3,0,.2,1)}
+.pf .tvid{position:relative;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:var(--ink2);cursor:pointer;
+  box-shadow:0 20px 60px -28px rgba(0,0,0,.85),0 0 0 1px var(--line);transition:box-shadow .4s,transform .4s}
+.pf .tvid video,.pf .tvid .ph{width:100%;height:100%;object-fit:cover}
+.pf .tcard:hover .tvid{transform:translateY(-6px);
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.9),0 0 0 1px rgba(185,160,106,.5),0 0 42px -12px rgba(185,160,106,.35)}
+.pf .tmeta{margin-top:18px;text-align:center}
+.pf .tname{font-family:var(--serif);font-size:15px;color:var(--ivory)}
+.pf .tbrok{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+.pf .tmetric{margin-top:12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600}
+
+/* 5 · CTA de escasez */
+.pf .sig-cta{text-align:center;margin-top:clamp(70px,11vh,130px)}
+.pf .sig-scarcity{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:26px}
+
+/* responsive */
+@media (max-width:900px){
+  .pf .sig-showcase{grid-template-columns:1fr;gap:clamp(30px,5vh,48px);justify-items:center}
+  .pf .sig-player{order:-1;width:min(300px,74vw)}
+  .pf .sig-flank{flex-direction:column;align-items:center;text-align:center;gap:clamp(28px,5vh,42px);width:100%}
+  .pf .sig-flank--l,.pf .sig-flank--r{align-items:center;text-align:center}
+  .pf .sig-equation{max-width:30ch}
+  .pf .sig-compound{flex-direction:column;gap:.22em}
+  .pf .sig-compound .cw:not(:last-child)::after{display:none}
+  .pf .testi-grid{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding-bottom:10px;-webkit-overflow-scrolling:touch}
+  .pf .testi-grid::-webkit-scrollbar{display:none}
+  .pf .tcard{flex:0 0 76%;scroll-snap-align:center}
+}
+@media (max-width:560px){
+  .pf .sig-flank{gap:24px}
+  .pf .sig-stat .n{font-size:clamp(36px,12vw,54px)}
+}

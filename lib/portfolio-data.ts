@@ -56,3 +56,32 @@ export const WA_MSG = 'Hi! I just saw the LuxeShots portfolio and I want my Cont
 
 /** Calendario de Acuity (booking drawer) */
 export const BOOKING_URL = 'https://luxeshots.as.me/';
+
+/* ===================================================================
+   THE SIGNATURE REEL  (sección nueva)
+   ===================================================================
+   DÓNDE VAN LOS VIDEOS: coloca los archivos .mp4 (verticales 9:16) en
+   la carpeta  /public/videos/  del repo (créala si no existe). Luego
+   pon aquí SOLO la ruta pública, que empieza en "/videos/...".
+   Ej: un archivo en  public/videos/signature-reel.mp4  se referencia
+   como  '/videos/signature-reel.mp4'.  Vacío ('') = placeholder.
+=================================================================== */
+
+/** Reel protagonista del showcase (vertical 9:16). */
+export const SIGNATURE_REEL = { video: '', poster: '' };
+
+/** 3 video testimonials (verticales 9:16).
+ *  Para reemplazarlos: cambia SOLO `video` y `poster` (y luego las
+ *  cifras de `metric`/nombres). El layout no se toca. */
+export type Testimonial = {
+  video: string;    // ruta al mp4 vertical, ej '/videos/testimonial-1.mp4' (vacío = placeholder)
+  poster: string;   // thumbnail, ej '/videos/testimonial-1.jpg'
+  name: string;     // nombre del agente
+  brokerage: string;// brokerage
+  metric: string;   // métrica dura (se muestra en dorado)
+};
+export const TESTIMONIALS: Testimonial[] = [
+  { video: '', poster: '', name: 'Agent Name', brokerage: 'Brokerage', metric: '127K views in 9 days' },
+  { video: '', poster: '', name: 'Agent Name', brokerage: 'Brokerage', metric: '3 listing leads in week one' },
+  { video: '', poster: '', name: 'Agent Name', brokerage: 'Brokerage', metric: '+2,400 followers' },
+];

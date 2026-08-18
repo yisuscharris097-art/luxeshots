@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import Hls from 'hls.js';
 import {
   HERO_VIDEO, HERO_VIDEO_MOBILE, REELS, GRID_PAGE,
+  SIGNATURE_REEL, TESTIMONIALS,
 } from '@/lib/portfolio-data';
 import './portfolio.css';
 
@@ -176,13 +177,20 @@ export default function PortfolioPage() {
       if (wm) { const r = wm.parentElement!.getBoundingClientRect(); wm.style.transform = `translateY(${r.top * -0.12}px)`; }
     }) as EventListener, { passive: true } as AddEventListenerOptions);
 
-    /* ---------- STAT COUNT-UP ---------- */
+    /* ---------- STAT COUNT-UP (hero + Signature Reel; soporta rango y miles) ---------- */
     function animateStat(el: HTMLElement) {
-      const raw = el.dataset.value!; const suffix = el.dataset.suffix || ''; const prefix = el.dataset.prefix || '';
-      const target = parseFloat(raw); const dur = 1600; const t0 = performance.now();
+      const suffix = el.dataset.suffix || ''; const prefix = el.dataset.prefix || '';
+      const t1 = parseFloat(el.dataset.value!);
+      const t2 = el.dataset.value2 ? parseFloat(el.dataset.value2) : null;
+      const comma = el.dataset.format === 'comma' || t2 != null;   // separador de miles
+      const sep = el.dataset.sep || '–';
+      const fmt = (n: number) => comma ? Math.round(n).toLocaleString('en-US') : String(Math.round(n));
+      const dur = 1600; const t0 = performance.now(); const b = el.querySelector('b')!;
       function tick(t: number) {
         const p = Math.min(1, (t - t0) / dur); const e = 1 - Math.pow(1 - p, 3);
-        el.querySelector('b')!.textContent = prefix + Math.round(target * e) + suffix;
+        b.textContent = t2 != null
+          ? prefix + fmt(t1 * e) + sep + fmt(t2 * e) + suffix
+          : prefix + fmt(t1 * e) + suffix;
         if (p < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
@@ -191,7 +199,7 @@ export default function PortfolioPage() {
       es.forEach((e) => { if (e.isIntersecting) { animateStat(e.target as HTMLElement); statIO.unobserve(e.target); } });
     }, { threshold: 0.6 });
     cleanups.push(() => statIO.disconnect());
-    document.querySelectorAll('.pf .stat .n[data-value]').forEach((el) => statIO.observe(el));
+    document.querySelectorAll('.pf .n[data-value]').forEach((el) => statIO.observe(el));
 
     /* ---------- MAGNETIC CTA ---------- */
     document.querySelectorAll('.pf .btn').forEach((b) => {
@@ -206,6 +214,25 @@ export default function PortfolioPage() {
       cleanups.push(() => { el.removeEventListener('pointermove', mv as EventListener); el.removeEventListener('pointerleave', lv); });
     });
 
+    /* ---------- SIGNATURE REEL / TESTIMONIALS (video play) ---------- */
+    const hoverable = window.matchMedia('(hover: hover)').matches;
+    document.querySelectorAll('.pf .sig-player, .pf .tcard').forEach((cardEl) => {
+      const card = cardEl as HTMLElement;
+      const v = card.querySelector('video') as HTMLVideoElement | null;
+      if (!v) return;                                   // slot placeholder (sin video aún)
+      if (hoverable) {
+        const enter = () => { v.muted = true; attach(v); v.play().catch(() => {}); };
+        const leave = () => { if (v.muted) { v.pause(); } };
+        card.addEventListener('mouseenter', enter); card.addEventListener('mouseleave', leave);
+        cleanups.push(() => { card.removeEventListener('mouseenter', enter); card.removeEventListener('mouseleave', leave); });
+      }
+      const play = () => {
+        attach(v); v.muted = false; v.controls = true; v.play().catch(() => {});
+        card.classList.add('playing');
+      };
+      card.addEventListener('click', play);
+      cleanups.push(() => card.removeEventListener('click', play));
+    });
 
     /* ---------- PRELOADER ---------- */
     const loaderT = setTimeout(() => $('loader').classList.add('done'), 1400);
@@ -287,6 +314,88 @@ export default function PortfolioPage() {
         <div className="loadmore-wrap" id="lmWrap">
           <button className="loadmore" id="lmBtn">Load More Reels</button>
           <span className="loadmore-count"><b id="lmShown">0</b> / <span id="lmTotal">0</span></span>
+        </div>
+      </section>
+
+      {/* ===== THE SIGNATURE REEL ===== */}
+      <section className="shell sigreel" id="signature">
+        {/* 1 · apertura cinematográfica */}
+        <div className="sig-open rv">
+          <div className="eyebrow">The Signature Reel</div>
+          <h2 className="sig-head">One reel. Built to <em>outlive</em> the day you shot it.</h2>
+          <div className="sig-body">
+            <p>The Signature Reel is designed to turn that content into a recognizable personal brand piece that lives beyond the day you shoot it.</p>
+            <p>You&rsquo;re not just creating another video for your camera roll. You&rsquo;re creating a piece of content built to grab attention, showcase your personality, and put your brand in front of new audiences.</p>
+            <p>And because Content Days bring multiple agents together around high-end properties, the exposure compounds. More agents. More audiences. More shares. More eyes on your brand.</p>
+          </div>
+        </div>
+
+        {/* 2 · showcase del reel protagonista */}
+        <div className="sig-showcase">
+          <div className="sig-flank sig-flank--l">
+            <div className="sig-stat rv">
+              <div className="n" data-value="1"><b>0</b></div>
+              <div className="l">Signature Reel</div>
+            </div>
+            <div className="sig-stat rv" style={{ transitionDelay: '.1s' }}>
+              <div className="n" data-value="24" data-prefix="+"><b>+0</b></div>
+              <div className="l">Viral Style Reels</div>
+            </div>
+          </div>
+
+          <div className="sig-player rv">
+            {SIGNATURE_REEL.video
+              ? <video className="sig-vid" preload="none" playsInline poster={SIGNATURE_REEL.poster || undefined} data-src={SIGNATURE_REEL.video}></video>
+              : <div className="ph"><span>Signature Reel</span></div>}
+            <span className="tplay" aria-hidden="true"><i></i></span>
+          </div>
+
+          <div className="sig-flank sig-flank--r">
+            <div className="sig-stat rv" style={{ transitionDelay: '.1s' }}>
+              <div className="n" data-value="60000" data-value2="600000" data-format="comma"><b>0&ndash;0</b></div>
+              <div className="l">Views</div>
+            </div>
+            <div className="sig-equation rv" style={{ transitionDelay: '.2s' }}>
+              1 signature reel + 24 viral style reels = 60,000&ndash;600,000 views
+            </div>
+          </div>
+        </div>
+
+        {/* 3 · línea de exposición compuesta */}
+        <div className="sig-compound" aria-label="More agents. More audiences. More shares. More eyes on your brand.">
+          <span className="cw rv">More agents.</span>
+          <span className="cw rv" style={{ transitionDelay: '.16s' }}>More audiences.</span>
+          <span className="cw rv" style={{ transitionDelay: '.32s' }}>More shares.</span>
+          <span className="cw rv" style={{ transitionDelay: '.48s' }}>More eyes on your brand.</span>
+        </div>
+
+        {/* 4 · testimonials en video */}
+        <div className="sig-subhead rv">
+          <div className="eyebrow">Video Testimonials</div>
+          <h3>What Agents Are Saying (With Receipts)</h3>
+        </div>
+        <div className="testi-grid">
+          {TESTIMONIALS.map((t, i) => (
+            <article className="tcard rv" key={i} style={{ transitionDelay: `${i * 0.09}s` }}>
+              <div className="tvid">
+                {t.video
+                  ? <video className="tvideo" preload="none" playsInline poster={t.poster || undefined} data-src={t.video}></video>
+                  : <div className="ph"><span>Testimonial {i + 1}</span></div>}
+                <span className="tplay" aria-hidden="true"><i></i></span>
+              </div>
+              <div className="tmeta">
+                <div className="tname">{t.name}</div>
+                <div className="tbrok">{t.brokerage}</div>
+                <div className="tmetric">{t.metric}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* 5 · CTA de escasez */}
+        <div className="sig-cta rv">
+          <p className="sig-scarcity">By Invitation Only &mdash; Limited spots per Content Day</p>
+          <a className="btn" href="#">Request Your Invite</a>
         </div>
       </section>
 
