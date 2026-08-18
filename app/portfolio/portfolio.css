@@ -86,6 +86,33 @@ body:has(.pf){cursor:auto}
   .pf .hero--video .hero-inner{padding-top:24px}
   .pf .hero--video .eyebrow,.pf .hero--video .hero-sub p{text-shadow:none}
 }
+
+/* ===== CAPAS EDITORIALES DEL HERO — visor de cámara + palabra fantasma ===== */
+.pf .vf,.pf .hero-ghost{pointer-events:none}
+/* — visor de cámara — */
+.pf .vf{position:absolute;inset:clamp(14px,1.6vw,24px);z-index:2}
+.pf .vf::before{content:"";position:absolute;inset:0;border:1px solid rgba(236,231,221,.15)}
+.pf .vf-c{position:absolute;width:18px;height:18px;border:1.5px solid var(--gold-2)}
+.pf .vf-tl{top:0;left:0;border-right:0;border-bottom:0}
+.pf .vf-tr{top:0;right:0;border-left:0;border-bottom:0}
+.pf .vf-bl{bottom:0;left:0;border-right:0;border-top:0}
+.pf .vf-br{bottom:0;right:0;border-left:0;border-top:0}
+.pf .vf-hud{position:absolute;font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+  color:rgba(236,231,221,.9);display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 10px rgba(0,0,0,.55)}
+.pf .vf-rec{top:clamp(36px,5vh,48px);left:14px}                    /* bajo el logo */
+.pf .vf-rec i{width:8px;height:8px;border-radius:50%;background:#e5484d;box-shadow:0 0 9px #e5484d;animation:pfRec 1.3s steps(1,end) infinite}
+.pf .vf-meta{top:clamp(36px,5vh,48px);right:14px;color:rgba(236,231,221,.5)}  /* bajo el kicker */
+@keyframes pfRec{0%,49%{opacity:1}50%,100%{opacity:.15}}
+/* — palabra fantasma gigante (outline dorado) — */
+.pf .hero-ghost{position:absolute;z-index:1;left:50%;top:42%;transform:translate(-50%,-50%);
+  font-family:var(--serif);font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:.8;white-space:nowrap;
+  font-size:clamp(46px,11.5vw,160px);color:transparent;-webkit-text-stroke:1px rgba(230,207,156,.5)}
+/* desktop: el marco encierra el video por encima de la barra de stats */
+@media (min-width:901px){
+  .pf .hero--video .vf{bottom:clamp(122px,16vh,150px)}
+}
+
 .pf .hero-inner{position:relative;z-index:2;padding:0 clamp(20px,4vw,48px)}
 .pf .hero .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:14px;
   opacity:0;animation:pfFadeUp 1s .4s ease forwards}

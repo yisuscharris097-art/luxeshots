@@ -61,9 +61,24 @@ export default function PortfolioPage() {
       hv.muted = true; hv.loop = true; hv.playsInline = true; hv.autoplay = true; hv.preload = 'metadata';
       hv.poster = heroSrc.replace('playlist.m3u8', 'thumbnail.jpg');
       hv.dataset.src = heroSrc;
-      $('heroMedia').innerHTML = '';
-      $('heroMedia').appendChild(hv);
+      const media = $('heroMedia');
+      media.querySelectorAll('video').forEach((v) => v.remove());  // idempotente (StrictMode)
+      media.querySelector('.ph')?.remove();
+      media.insertBefore(hv, media.firstChild);
       attach(hv); hv.play().catch(() => {});
+      cleanups.push(() => hv.remove());
+    }
+
+    /* timecode en vivo del visor de cámara */
+    const tcEl = document.getElementById('tc');
+    if (tcEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let f = 0;
+      const p2 = (n: number) => String(n).padStart(2, '0');
+      const tcIv = window.setInterval(() => {
+        f = (f + 1) % (25 * 3600);
+        tcEl.textContent = `${p2(Math.floor(f / 25 / 60) % 60)}:${p2(Math.floor(f / 25) % 60)}:${p2(f % 25)}`;
+      }, 40);
+      cleanups.push(() => clearInterval(tcIv));
     }
 
     const mediaHTML = (r: typeof REELS[number], i: number) =>
@@ -247,7 +262,16 @@ export default function PortfolioPage() {
 
       {/* HERO */}
       <section className="hero hero--video" id="topHero">
-        <div className="hero-media" id="heroMedia"><div className="ph"></div></div>
+        <div className="hero-media" id="heroMedia">
+          <div className="ph"></div>
+          <div className="vf" aria-hidden="true">
+            <span className="vf-c vf-tl"></span><span className="vf-c vf-tr"></span>
+            <span className="vf-c vf-bl"></span><span className="vf-c vf-br"></span>
+            <div className="vf-hud vf-rec"><i></i>Rec <span id="tc">00:00:00</span></div>
+            <div className="vf-hud vf-meta">LuxeShots · 4K · South Florida</div>
+          </div>
+          <div className="hero-ghost" aria-hidden="true">Showreel</div>
+        </div>
         <div className="hero-inner">
           <div className="eyebrow">LuxeShots — The Portfolio</div>
           <div className="hero-sub">
