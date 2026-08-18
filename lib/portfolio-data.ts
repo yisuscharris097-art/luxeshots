@@ -68,7 +68,10 @@ export const BOOKING_URL = 'https://luxeshots.as.me/';
 =================================================================== */
 
 /** Reel protagonista del showcase (vertical 9:16). */
-export const SIGNATURE_REEL = { video: '', poster: '' };
+export const SIGNATURE_REEL = {
+  video: `${BUNNY}/cbe943ef-757e-4d8b-9e87-aec35aa67aae/playlist.m3u8`,
+  poster: `${BUNNY}/cbe943ef-757e-4d8b-9e87-aec35aa67aae/thumbnail.jpg`,
+};
 
 /** 3 video testimonials (verticales 9:16).
  *  Para reemplazarlos: cambia SOLO `video` y `poster` (y luego las
