@@ -401,8 +401,10 @@ body:has(.pf){cursor:auto}
 .pf .sig-flank--l{align-items:flex-end;text-align:right}
 .pf .sig-flank--r{align-items:flex-start;text-align:left}
 .pf .sig-player{align-self:center}
-.pf .sig-stat .n{font-family:var(--serif);font-weight:300;font-size:clamp(44px,4.8vw,80px);line-height:.95;color:var(--ivory)}
-.pf .sig-stat .n b{font-weight:300;color:var(--ivory)}
+.pf .sig-stat .n{position:relative;font-family:var(--serif);font-weight:300;font-size:clamp(44px,4.8vw,80px);
+  line-height:.95;color:var(--ivory);font-variant-numeric:tabular-nums}
+.pf .sig-stat .n b{position:absolute;inset:0;font-weight:300;color:var(--ivory)}   /* anima encima */
+.pf .sig-stat .n .sz{visibility:hidden}                                            /* reserva el tamaño final: sin reflow al contar */
 .pf .sig-stat .l{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim);margin-top:10px}
 .pf .sig-equation{font-family:var(--serif);font-size:clamp(13px,1.15vw,15.5px);color:var(--dim);line-height:1.6;max-width:24ch}
 

@@ -334,11 +334,11 @@ export default function PortfolioPage() {
         <div className="sig-showcase">
           <div className="sig-flank sig-flank--l">
             <div className="sig-stat rv">
-              <div className="n" data-value="1"><b>0</b></div>
+              <div className="n" data-value="1"><b>0</b><span className="sz" aria-hidden="true">1</span></div>
               <div className="l">Signature Reel</div>
             </div>
             <div className="sig-stat rv" style={{ transitionDelay: '.1s' }}>
-              <div className="n" data-value="24" data-prefix="+"><b>+0</b></div>
+              <div className="n" data-value="24" data-prefix="+"><b>+0</b><span className="sz" aria-hidden="true">+24</span></div>
               <div className="l">Viral Style Reels</div>
             </div>
           </div>
@@ -352,7 +352,7 @@ export default function PortfolioPage() {
 
           <div className="sig-flank sig-flank--r">
             <div className="sig-stat rv" style={{ transitionDelay: '.1s' }}>
-              <div className="n" data-value="60000" data-value2="600000" data-format="comma"><b>0&ndash;0</b></div>
+              <div className="n" data-value="60000" data-value2="600000" data-format="comma"><b>0&ndash;0</b><span className="sz" aria-hidden="true">60,000&ndash;600,000</span></div>
               <div className="l">Views</div>
             </div>
             <div className="sig-equation rv" style={{ transitionDelay: '.2s' }}>
