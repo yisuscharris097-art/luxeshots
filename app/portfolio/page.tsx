@@ -270,7 +270,6 @@ export default function PortfolioPage() {
             <div className="vf-hud vf-rec"><i></i>Rec <span id="tc">00:00:00</span></div>
             <div className="vf-hud vf-meta">LuxeShots · 4K · South Florida</div>
           </div>
-          <div className="hero-ghost" aria-hidden="true">Showreel</div>
         </div>
         <div className="hero-inner">
           <div className="eyebrow">LuxeShots — The Portfolio</div>
