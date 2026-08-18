@@ -69,18 +69,6 @@ export default function PortfolioPage() {
       cleanups.push(() => hv.remove());
     }
 
-    /* timecode en vivo del visor de cámara */
-    const tcEl = document.getElementById('tc');
-    if (tcEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let f = 0;
-      const p2 = (n: number) => String(n).padStart(2, '0');
-      const tcIv = window.setInterval(() => {
-        f = (f + 1) % (25 * 3600);
-        tcEl.textContent = `${p2(Math.floor(f / 25 / 60) % 60)}:${p2(Math.floor(f / 25) % 60)}:${p2(f % 25)}`;
-      }, 40);
-      cleanups.push(() => clearInterval(tcIv));
-    }
-
     const mediaHTML = (r: typeof REELS[number], i: number) =>
       r.src
         ? `<video muted loop playsinline preload="none" ${r.poster ? `poster="${r.poster}"` : ''} data-src="${r.src}"></video>`
@@ -267,8 +255,6 @@ export default function PortfolioPage() {
           <div className="vf" aria-hidden="true">
             <span className="vf-c vf-tl"></span><span className="vf-c vf-tr"></span>
             <span className="vf-c vf-bl"></span><span className="vf-c vf-br"></span>
-            <div className="vf-hud vf-rec"><i></i>Rec <span id="tc">00:00:00</span></div>
-            <div className="vf-hud vf-meta">LuxeShots · 4K · South Florida</div>
           </div>
         </div>
         <div className="hero-inner">
