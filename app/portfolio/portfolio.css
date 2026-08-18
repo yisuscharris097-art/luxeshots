@@ -7,7 +7,7 @@
 ============================================================ */
 
 .pf{
-  --ink:#0B0B0C;
+  --ink:#000;
   --ink2:#121110;
   --ivory:#ECE7DD;
   --dim:#8C8273;
@@ -25,7 +25,7 @@
 .pf a{color:inherit;text-decoration:none}
 .pf img,.pf video{display:block}
 html:has(.pf){scroll-behavior:smooth}
-body:has(.pf){cursor:auto}
+body:has(.pf){cursor:auto;background:#000}
 @media (pointer:fine){ body:has(.pf),body:has(.pf) a,body:has(.pf) button{cursor:auto} }
 
 /* grain */
@@ -64,7 +64,7 @@ body:has(.pf){cursor:auto}
 .pf .hero-media .ph{width:100%;height:100%;background:
   radial-gradient(120% 90% at 75% 5%,rgba(185,160,106,.2),transparent 55%),
   radial-gradient(80% 70% at 10% 95%,rgba(185,160,106,.1),transparent 60%),
-  linear-gradient(180deg,#12100d,#0B0B0C 75%)}
+  linear-gradient(180deg,#0a0a0a,#000 75%)}
 .pf .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,12,.4),transparent 40%,rgba(11,11,12,.95))}
 /* hero de video: centro libre para el video, oscuro solo arriba (nav) y abajo (texto+stats) */
 .pf .hero--video::after{background:linear-gradient(180deg,
@@ -82,7 +82,7 @@ body:has(.pf){cursor:auto}
   .pf .hero--video .hero-media video{filter:brightness(.92)}          /* casi limpio: ya no hay texto encima */
   .pf .hero--video::after{content:none}                               /* sin scrim de pantalla completa */
   .pf .hero--video .hero-media::after{content:"";position:absolute;inset:auto 0 0 0;height:32%;
-    background:linear-gradient(180deg,transparent,#0B0B0C);pointer-events:none}  /* fade suave al fondo */
+    background:linear-gradient(180deg,transparent,#000);pointer-events:none}  /* fade suave al fondo */
   .pf .hero--video .hero-inner{padding-top:24px}
   .pf .hero--video .eyebrow,.pf .hero--video .hero-sub p{text-shadow:none}
 }
