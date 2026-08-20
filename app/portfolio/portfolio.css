@@ -40,6 +40,8 @@ body:has(.pf){cursor:auto;background:#000}
   background:linear-gradient(180deg,rgba(11,11,12,.85),transparent);backdrop-filter:blur(2px)}
 .pf .logo{font-family:var(--serif);font-weight:700;font-size:22px}
 .pf .logo b{font-weight:800;color:var(--gold)}
+.pf .logo img{height:26px;width:auto;display:block;transition:opacity .3s}
+.pf .logo:hover img{opacity:.72}
 .pf .hdr-right{display:flex;align-items:center;gap:24px;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase}
 .pf .hdr-right .kicker{color:var(--dim)}
 .pf .hdr-cta{border:1px solid var(--line);padding:10px 20px;border-radius:99px;transition:.35s;color:var(--ivory);
@@ -192,6 +194,7 @@ body:has(.pf){cursor:auto;background:#000}
   display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .pf footer .logo{font-size:18px;color:var(--ivory);text-transform:none;letter-spacing:.02em}
+.pf footer .logo img{height:22px}
 .pf footer a:hover{color:var(--gold)}
 
 /* ======================= UPGRADES ======================= */
@@ -200,6 +203,7 @@ body:has(.pf){cursor:auto;background:#000}
 .pf .loader.done{opacity:0;visibility:hidden}
 .pf .loader .mark{font-family:var(--serif);font-weight:700;font-size:clamp(28px,4vw,44px);opacity:0;animation:pfFadeUp 1s .1s ease forwards}
 .pf .loader .mark b{font-weight:800;color:var(--gold)}
+.pf .loader .mark img{height:clamp(40px,6vw,60px);width:auto;display:block}
 .pf .loader .mark-sub{font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-top:-6px;
   opacity:0;animation:pfFadeUp 1s .2s ease forwards}
 .pf .loader .bar{width:130px;height:1px;background:var(--line);overflow:hidden;opacity:0;animation:pfFadeUp 1s .3s ease forwards}

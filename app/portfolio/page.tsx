@@ -250,8 +250,8 @@ export default function PortfolioPage() {
       <div className="grain" aria-hidden="true"></div>
 
       <div className="loader" id="loader">
-        <div className="mark">Luxe<b>Shots</b></div>
-        <div className="mark-sub">Portfolio</div>
+        <div className="mark"><img src="/images/luxeshots-logo-white.png" alt="LuxeShots" /></div>
+        <div className="mark-sub">The Portfolio</div>
         <div className="bar"><i></i></div>
       </div>
       <div className="scrollbar"><i id="sbar"></i></div>
@@ -264,7 +264,7 @@ export default function PortfolioPage() {
       </div>
 
       <header>
-        <a className="logo" href="#top">Luxe<b>Shots</b></a>
+        <a className="logo" href="#top"><img src="/images/luxeshots-logo-white.png" alt="LuxeShots" /></a>
         <div className="hdr-right">
           <span className="kicker">LuxeShots — The Portfolio</span>
         </div>
@@ -395,7 +395,7 @@ export default function PortfolioPage() {
       </section>
 
       <footer>
-        <a className="logo" href="#top">Luxe<b>Shots</b></a>
+        <a className="logo" href="#top"><img src="/images/luxeshots-logo-white.png" alt="LuxeShots" /></a>
         <span>Shot Where Luxury Lives</span>
         <a href="https://instagram.com/luxeshotsbyus" target="_blank" rel="noopener">Instagram</a>
         <span>© 2026 LuxeShots · South Florida</span>
