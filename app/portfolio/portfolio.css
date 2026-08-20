@@ -150,7 +150,7 @@ body:has(.pf){cursor:auto;background:#000}
   radial-gradient(120% 80% at 50% 0%,var(--gold-soft),transparent 60%),linear-gradient(200deg,#171310,#0a0806)}
 .pf .card .ph span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);padding:9px 15px;border-radius:99px}
 .pf .card:hover video,.pf .card:hover .ph{transform:scale(1.05)}
-.pf .card .top{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;padding:16px 18px;
+.pf .card .top{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:flex-end;align-items:flex-start;padding:16px 18px;
   background:linear-gradient(180deg,rgba(11,11,12,.65),transparent)}
 .pf .card .idx{font-family:var(--serif);font-weight:600;color:var(--gold);font-size:15px}
 .pf .card .price{font-family:var(--serif);font-weight:600;font-size:20px;line-height:1}

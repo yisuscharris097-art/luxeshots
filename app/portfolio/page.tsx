@@ -104,6 +104,7 @@ export default function PortfolioPage() {
       c.style.transitionDelay = ((i % 3) * 0.08) + 's';
       c.innerHTML = `
         ${mediaHTML(r, i)}
+        <div class="top"><span class="price">${r.price}</span></div>
         <div class="play"><i>PLAY</i></div>
         <span class="gold-edge"></span>`;
       gridEl.appendChild(c);
