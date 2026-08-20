@@ -287,7 +287,7 @@ export default function PortfolioPage() {
           </div>
         </div>
         <div className="stats">
-          <div className="stat"><div className="n" data-value="400" data-prefix="$" data-suffix="M+"><b>$0M+</b></div><div className="l">In Listings Filmed</div></div>
+          <div className="stat"><div className="n" data-value="1" data-prefix="$" data-suffix="B+"><b>$0B+</b></div><div className="l">In Listings Filmed</div></div>
           <div className="stat"><div className="n" data-value="100" data-suffix="%"><b>0%</b></div><div className="l">Five-Star Reviews</div></div>
           <div className="stat"><div className="n" data-value="17" data-suffix="M+"><b>0M+</b></div><div className="l">Views Generated</div></div>
         </div>
@@ -390,7 +390,7 @@ export default function PortfolioPage() {
         {/* 5 · CTA de escasez */}
         <div className="sig-cta rv">
           <p className="sig-scarcity">By Invitation Only &mdash; Limited spots per Content Day</p>
-          <a className="btn" href="#">Request Your Invite</a>
+          <a className="btn" href="/">Request Your Invite</a>
         </div>
       </section>
 

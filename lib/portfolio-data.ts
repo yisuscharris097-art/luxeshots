@@ -86,7 +86,7 @@ export type Testimonial = {
 /** helper Bunny para testimonials (HLS + thumbnail) */
 const tbunny = (guid: string) => ({ video: `${BUNNY}/${guid}/playlist.m3u8`, poster: `${BUNNY}/${guid}/thumbnail.jpg` });
 export const TESTIMONIALS: Testimonial[] = [
-  { ...tbunny('7ed022f7-ddba-4164-96b6-8682bca42040'), name: 'Agent Name', brokerage: 'Brokerage', metric: '127K views in 9 days' },
-  { ...tbunny('91dd9b92-9866-41f8-b603-1bb753a731fe'), name: 'Agent Name', brokerage: 'Brokerage', metric: '3 listing leads in week one' },
-  { ...tbunny('4923995e-da9b-49fd-9d21-4b8c09283532'), name: 'Agent Name', brokerage: 'Brokerage', metric: '+2,400 followers' },
+  { ...tbunny('7ed022f7-ddba-4164-96b6-8682bca42040'), name: 'Chevelle Young', brokerage: 'Brokerage', metric: '127K views in 9 days' },
+  { ...tbunny('91dd9b92-9866-41f8-b603-1bb753a731fe'), name: 'Barbara Andara', brokerage: 'Brokerage', metric: '3 listing leads in week one' },
+  { ...tbunny('4923995e-da9b-49fd-9d21-4b8c09283532'), name: 'Keaton Daley', brokerage: 'Brokerage', metric: '+2,400 followers' },
 ];
