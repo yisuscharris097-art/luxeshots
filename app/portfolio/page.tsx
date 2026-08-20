@@ -74,7 +74,6 @@ export default function PortfolioPage() {
       r.src
         ? `<video muted loop playsinline preload="none" ${r.poster ? `poster="${r.poster}"` : ''} data-src="${r.src}"></video>`
         : `<div class="ph"><span>Reel ${pad(i + 1)}</span></div>`;
-    const botHTML = (r: typeof REELS[number]) => `<div class="bot"><div class="agent">${r.location}</div></div>`;
 
     const lazyIO = new IntersectionObserver((es) => {
       es.forEach((e) => {
@@ -105,9 +104,7 @@ export default function PortfolioPage() {
       c.style.transitionDelay = ((i % 3) * 0.08) + 's';
       c.innerHTML = `
         ${mediaHTML(r, i)}
-        <div class="top"><span class="idx">N° ${pad(i + 1)}</span><span class="price">${r.price}</span></div>
         <div class="play"><i>PLAY</i></div>
-        ${botHTML(r)}
         <span class="gold-edge"></span>`;
       gridEl.appendChild(c);
       const v = c.querySelector('video') as HTMLVideoElement | null;
@@ -145,10 +142,8 @@ export default function PortfolioPage() {
     function renderLB() {
       const r = REELS[lbIdx];
       lbStage.innerHTML = `
-        <span class="lb-idx">N° ${pad(lbIdx + 1)}</span>
         ${lbMedia(r, lbIdx)}
-        <span class="edge"></span>
-        <div class="lb-meta"><span class="a">${r.location}</span><span class="p">${r.price}</span></div>`;
+        <span class="edge"></span>`;
       attach(lbStage.querySelector('video')); // HLS con sonido (gesto de click permite autoplay)
     }
     function closeLB() {
