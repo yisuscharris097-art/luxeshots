@@ -391,7 +391,7 @@ export default function PortfolioPage() {
         {/* 5 · CTA de escasez */}
         <div className="sig-cta rv">
           <p className="sig-scarcity">By Invitation Only &mdash; Limited spots per Content Day</p>
-          <a className="btn" href="/">Request Your Invite</a>
+          <a className="btn" href="https://luxecontentdays.com/">Request Your Invite</a>
         </div>
       </section>
 
